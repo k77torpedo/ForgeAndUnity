@@ -75,6 +75,8 @@
     <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\ExampleProximityPlayerNetworkObject.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\NetworkCameraBehavior.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\NetworkCameraNetworkObject.cs" />
+    <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\RandomMovingNPCBehavior.cs" />
+    <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\RandomMovingNPCNetworkObject.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\TestBehavior.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\TestNetworkObject.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Modules\Chat\ChatMaker.cs" />
@@ -100,6 +102,8 @@
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\Server Browser\ServerBrowser.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\Server Browser\ServerBrowserItem.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\UnityObjectMapper.cs" />
+    <Compile Include="Assets\ForgeAndUnity\Examples\MultiServer\Scripts\RandomMovingNPC.cs" />
+    <Compile Include="Assets\ForgeAndUnity\Examples\MultiServer\Scripts\Spawner.cs" />
     <Compile Include="Assets\ForgeAndUnity\Forge\1_RPCs\RPCCreateNetworkSceneInNode.cs" />
     <Compile Include="Assets\ForgeAndUnity\Forge\1_RPCs\RPCInstantiateInNode.cs" />
     <Compile Include="Assets\ForgeAndUnity\Forge\1_RPCs\RPCNetworkSceneItem.cs" />

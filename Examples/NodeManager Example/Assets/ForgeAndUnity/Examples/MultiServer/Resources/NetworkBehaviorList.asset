@@ -16,4 +16,8 @@ MonoBehaviour:
   behaviorSetName: NetworkBehaviors
   description: NetworkBehaviors for our game. This list valid for all NetworkScenes.
   behaviorList:
-    _initWithNetworkBehaviorListItems: []
+    _initWithNetworkBehaviorListItems:
+    - _createCode: 1
+      _name: RandomMovingNPC
+      _networkBehavior: {fileID: 3534149121963320426, guid: 76461ea17ca8aa949999c1690a606e95,
+        type: 3}
