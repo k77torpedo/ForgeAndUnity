@@ -71,6 +71,18 @@ public class NodeMap : IRPCSerializable<RPCNodeMap> {
         return null;
     }
 
+    public virtual NodeNetworkSceneTemplate GetNodeTemplateBySceneName (string pSceneName) {
+        NetworkSceneTemplate template;
+        foreach (var item in _nodes.Values) {
+            template = item.GetBySceneName(pSceneName);
+            if (template != null) {
+                return new NodeNetworkSceneTemplate(item.NodeId, template);
+            }
+        }
+
+        return null;
+    }
+
     public virtual Node GetMasterNode () {
         foreach (var item in _nodes.Values) {
             if (item.IsMasterNode) {

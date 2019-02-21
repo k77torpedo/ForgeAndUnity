@@ -65,7 +65,15 @@ public class NetworkSceneTeleporter : MonoBehaviour {
             }
         }
 
-        // Lookup if the scene is on another Node
+        // Lookup the NodeMap if there is a static NetworkScene we can find on another Node
+        if (_nodeTemplate == null && NodeManager.Instance.NodeMapSO != null) {
+            _nodeTemplate = NodeManager.Instance.NodeMapSO.nodeMap.GetNodeTemplateBySceneName(_sceneName);
+            if (_nodeTemplate != null) {
+                return;
+            }
+        }
+
+        // Lookup if the scene is a dynamic NetworkScene on another Node
         if (_nodeTemplate == null && _enableLookup && _currentLookup == null) {
             _currentLookup = NodeManager.Instance.LookUpNetworkSceneTemplate(_sceneName);
             if (_currentLookup.State == ServiceCallbackStateEnum.RESPONSE_SUCCESS) {
@@ -130,6 +138,7 @@ public class NetworkSceneTeleporter : MonoBehaviour {
             DestroyPendingObject(pBehavior);
         } else {
             ServiceCallback<RPCInstantiateInNode, ServiceCallbackStateEnum> callback = NodeManager.Instance.InstantiateInNode(_nodeTemplate.NodeId, _nodeTemplate.SceneName, nObj.CreateCode, (pBehavior as IRPCSerializable), _teleportTarget.position, _teleportTarget.rotation);
+            BMSLogger.Instance.Log(callback.State.ToString());
             if (callback.State == ServiceCallbackStateEnum.AWAITING_RESPONSE) {
                 callback.OnResponseOfT += (pResponseTime, pResponseDataOfT, pSender) => {
                     Callback_InstantiateInNode(callback, pBehavior);

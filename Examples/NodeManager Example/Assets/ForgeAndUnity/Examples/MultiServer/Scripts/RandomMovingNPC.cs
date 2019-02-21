@@ -23,7 +23,7 @@ public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRP
         _meshRenderer = GetComponent<MeshRenderer>();
         _agent = GetComponent<NavMeshAgent>();
         _agent.enabled = false;
-        SetColor(new Color(Random.Range(0f, 255f), Random.Range(0f, 255f), Random.Range(0f, 255f)));
+        SetColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
     }
 
     protected override void NetworkStart () {
@@ -37,7 +37,7 @@ public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRP
             return;
         }
 
-        if (networkObject.IsServer) {
+        if (networkObject.IsOwner) {
             networkObject.position = transform.position;
             networkObject.rotation = transform.rotation;
         } else {
@@ -81,11 +81,12 @@ public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRP
     #region IRPCSerializable-Implementation
     public byte[] ToByteArray () {
         Color color = _meshRenderer.material.color;
-        return new byte[] { (byte)color.r, (byte)color.g, (byte)color.b };
+        return new float[] { color.r, color.g, color.b }.ObjectToByteArray();
     }
 
     public void FromByteArray (byte[] pByteArray) {
-        Color color = new Color(pByteArray[0], pByteArray[1], pByteArray[2]);
+        float[] colors = pByteArray.ByteArrayToObject<float[]>();
+        Color color = new Color(colors[0], colors[1], colors[2]);
         _meshRenderer.material.color = color;
     }
 

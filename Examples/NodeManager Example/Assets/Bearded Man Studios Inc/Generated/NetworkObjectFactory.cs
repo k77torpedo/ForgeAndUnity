@@ -39,13 +39,21 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new NetworkCameraNetworkObject(networker, id, frame);
 						break;
-					case TestNetworkObject.IDENTITY:
+					case NodeServiceNetworkObject.IDENTITY:
 						availableCallback = true;
-						obj = new TestNetworkObject(networker, id, frame);
+						obj = new NodeServiceNetworkObject(networker, id, frame);
+						break;
+					case PlayerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new PlayerNetworkObject(networker, id, frame);
 						break;
 					case RandomMovingNPCNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new RandomMovingNPCNetworkObject(networker, id, frame);
+						break;
+					case TestNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new TestNetworkObject(networker, id, frame);
 						break;
 				}
 
