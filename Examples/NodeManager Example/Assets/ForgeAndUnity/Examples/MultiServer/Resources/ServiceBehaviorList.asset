@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88d4e28800257dc4fbbf570c24f235d3, type: 3}
+  m_Name: ServiceBehaviorList
+  m_EditorClassIdentifier: 
+  id: 2
+  behaviorSetName: ServiceBehaviors
+  description: NetworkBehaviors for communication between Nodes are listed here.
+  behaviorList:
+    _initWithNetworkBehaviorListItems:
+    - _createCode: 1
+      _name: NodeService
+      _networkBehavior: {fileID: 785160600643321823, guid: 0a63940c4914cd346832137cadf3a213,
+        type: 3}
