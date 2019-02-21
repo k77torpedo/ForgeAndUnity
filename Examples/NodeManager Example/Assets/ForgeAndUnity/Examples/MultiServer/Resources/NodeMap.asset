@@ -55,30 +55,68 @@ MonoBehaviour:
           _clientNATAddress:
             _ip: 
             _port: 0
+      - _buildIndex: 4
+        _sceneName: World_2_1
+        _sceneOffset: {x: 0, y: 0, z: 0}
+        _settings:
+          _maxConnections: 64
+          _useTCP: 0
+          _useMainThreadManagerForRPCs: 1
+          _serverAddress:
+            _ip: 127.0.0.1
+            _port: 15954
+          _serverNATAddress:
+            _ip: 
+            _port: 0
+          _clientAddress:
+            _ip: 127.0.0.1
+            _port: 15954
+          _clientNATAddress:
+            _ip: 
+            _port: 0
+      - _buildIndex: 5
+        _sceneName: World_2_2
+        _sceneOffset: {x: 0, y: 0, z: 0}
+        _settings:
+          _maxConnections: 64
+          _useTCP: 0
+          _useMainThreadManagerForRPCs: 1
+          _serverAddress:
+            _ip: 127.0.0.1
+            _port: 15955
+          _serverNATAddress:
+            _ip: 
+            _port: 0
+          _clientAddress:
+            _ip: 127.0.0.1
+            _port: 15955
+          _clientNATAddress:
+            _ip: 
+            _port: 0
     - _nodeId: 2
       _nodeName: Server_2
       _isMasterNode: 0
       _dynamicPortMin: 16100
       _dynamicPortMax: 16199
       _masterNodeSetting:
-        _maxConnections: 0
+        _maxConnections: 64
         _useTCP: 0
-        _useMainThreadManagerForRPCs: 0
+        _useMainThreadManagerForRPCs: 1
         _serverAddress:
-          _ip: 
-          _port: 0
+          _ip: 127.0.0.1
+          _port: 15950
         _serverNATAddress:
           _ip: 
           _port: 0
         _clientAddress:
-          _ip: 
-          _port: 0
+          _ip: 127.0.0.1
+          _port: 15950
         _clientNATAddress:
           _ip: 
           _port: 0
       _initWithNetworkScenes:
       - _buildIndex: 2
-        _sceneName: World_1
+        _sceneName: World_1_1
         _sceneOffset: {x: 0, y: 0, z: 0}
         _settings:
           _maxConnections: 64
@@ -93,6 +131,25 @@ MonoBehaviour:
           _clientAddress:
             _ip: 127.0.0.1
             _port: 15952
+          _clientNATAddress:
+            _ip: 
+            _port: 0
+      - _buildIndex: 3
+        _sceneName: World_1_2
+        _sceneOffset: {x: 0, y: 0, z: 0}
+        _settings:
+          _maxConnections: 64
+          _useTCP: 0
+          _useMainThreadManagerForRPCs: 1
+          _serverAddress:
+            _ip: 127.0.0.1
+            _port: 15953
+          _serverNATAddress:
+            _ip: 
+            _port: 0
+          _clientAddress:
+            _ip: 127.0.0.1
+            _port: 15953
           _clientNATAddress:
             _ip: 
             _port: 0
@@ -102,24 +159,24 @@ MonoBehaviour:
       _dynamicPortMin: 16200
       _dynamicPortMax: 16299
       _masterNodeSetting:
-        _maxConnections: 0
+        _maxConnections: 64
         _useTCP: 0
-        _useMainThreadManagerForRPCs: 0
+        _useMainThreadManagerForRPCs: 1
         _serverAddress:
-          _ip: 
-          _port: 0
+          _ip: 127.0.0.1
+          _port: 15950
         _serverNATAddress:
           _ip: 
           _port: 0
         _clientAddress:
-          _ip: 
-          _port: 0
+          _ip: 127.0.0.1
+          _port: 15950
         _clientNATAddress:
           _ip: 
           _port: 0
       _initWithNetworkScenes:
-      - _buildIndex: 3
-        _sceneName: World_2
+      - _buildIndex: 6
+        _sceneName: World_3_1
         _sceneOffset: {x: 0, y: 0, z: 0}
         _settings:
           _maxConnections: 64
@@ -127,54 +184,32 @@ MonoBehaviour:
           _useMainThreadManagerForRPCs: 1
           _serverAddress:
             _ip: 127.0.0.1
-            _port: 15953
+            _port: 15956
           _serverNATAddress:
             _ip: 
             _port: 0
           _clientAddress:
             _ip: 127.0.0.1
-            _port: 15953
+            _port: 15956
           _clientNATAddress:
             _ip: 
             _port: 0
-    - _nodeId: 4
-      _nodeName: Server_4
-      _isMasterNode: 0
-      _dynamicPortMin: 16300
-      _dynamicPortMax: 16399
-      _masterNodeSetting:
-        _maxConnections: 0
-        _useTCP: 0
-        _useMainThreadManagerForRPCs: 0
-        _serverAddress:
-          _ip: 
-          _port: 0
-        _serverNATAddress:
-          _ip: 
-          _port: 0
-        _clientAddress:
-          _ip: 
-          _port: 0
-        _clientNATAddress:
-          _ip: 
-          _port: 0
-      _initWithNetworkScenes:
-      - _buildIndex: 4
-        _sceneName: World_3
+      - _buildIndex: 7
+        _sceneName: World_3_2
         _sceneOffset: {x: 0, y: 0, z: 0}
         _settings:
-          _maxConnections: 0
+          _maxConnections: 64
           _useTCP: 0
           _useMainThreadManagerForRPCs: 1
           _serverAddress:
             _ip: 127.0.0.1
-            _port: 15954
+            _port: 15957
           _serverNATAddress:
             _ip: 
             _port: 0
           _clientAddress:
             _ip: 127.0.0.1
-            _port: 15954
+            _port: 15957
           _clientNATAddress:
             _ip: 
             _port: 0
