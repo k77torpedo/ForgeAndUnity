@@ -304,7 +304,7 @@ public class NodeManager : MonoBehaviour {
             return null;
         }
 
-        return CreateEmptyNetworkScene(new NetworkSceneTemplate(0, MASTER_SCENE_NAME, Vector3.zero, pNode.MasterNodeSetting), pBehaviorListSO);
+        return CreateEmptyNetworkScene(new NetworkSceneTemplate(0, MASTER_SCENE_NAME, RPCVector3.zero, pNode.MasterNodeSetting), pBehaviorListSO);
     }
 
     public virtual void UnloadNetworkScenes (bool pUnloadScenesStatic, bool pUnloadScenesDynamic) {
@@ -632,7 +632,7 @@ public class NodeManager : MonoBehaviour {
         for (int i = 0; i < _pendingScenes.CacheItems.Count; i++) {
             if (_pendingScenes.CacheItems[i].Value.SceneTemplate.BuildIndex == pScene.buildIndex) {
                 item = _pendingScenes.CacheItems[i].Value;
-                ApplySceneOffset(pScene, item.SceneTemplate.SceneOffset);
+                ApplySceneOffset(pScene, item.SceneTemplate.SceneOffset.ToVector3());
                 SceneManager.MergeScenes(pScene, item.Manager.gameObject.scene);
                 item.IsCreated = true;
                 item.RaiseCreated();

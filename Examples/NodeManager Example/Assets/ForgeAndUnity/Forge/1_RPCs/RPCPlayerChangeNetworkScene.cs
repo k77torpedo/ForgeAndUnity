@@ -21,7 +21,7 @@ public struct RPCPlayerChangeNetworkScene {
         return new RPCPlayerChangeNetworkScene() {
             buildIndex = pTemplate.BuildIndex,
             sceneName = pTemplate.SceneName,
-            sceneOffset = pTemplate.SceneOffset.ToRPC(),
+            sceneOffset = pTemplate.SceneOffset,
             useTCP = pTemplate.Settings.UseTCP,
             useMainThreadManagerForRPCs = pTemplate.Settings.UseMainThreadManagerForRPCs,
             clientAddress = pTemplate.Settings.ClientAddress.ToRPC(),
@@ -30,7 +30,7 @@ public struct RPCPlayerChangeNetworkScene {
     }
 
     public static NetworkSceneTemplate ToNetworkSceneTemplate (RPCPlayerChangeNetworkScene pChangeSceneRPC) {
-        NetworkSceneTemplate template = new NetworkSceneTemplate(pChangeSceneRPC.buildIndex, pChangeSceneRPC.sceneName, pChangeSceneRPC.sceneOffset.ToVector3(), new NetworkSceneManagerSetting());
+        NetworkSceneTemplate template = new NetworkSceneTemplate(pChangeSceneRPC.buildIndex, pChangeSceneRPC.sceneName, pChangeSceneRPC.sceneOffset, new NetworkSceneManagerSetting());
         template.Settings.UseTCP = pChangeSceneRPC.useTCP;
         template.Settings.UseMainThreadManagerForRPCs = pChangeSceneRPC.useMainThreadManagerForRPCs;
         template.Settings.ClientAddress.FromRPC(pChangeSceneRPC.clientAddress);

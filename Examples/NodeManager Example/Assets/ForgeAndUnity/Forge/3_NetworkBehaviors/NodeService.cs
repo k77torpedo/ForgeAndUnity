@@ -423,7 +423,7 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
         byte[] data = pArgs.GetNext<byte[]>();
         RPCServiceCallback callbackRPC = data.ByteArrayToObject<RPCServiceCallback>();
         string sceneName = callbackRPC.data.ByteArrayToObject<string>();
-        NodeNetworkSceneTemplate nodeTemplate = (GetRegisteredScene(sceneName) ?? new NodeNetworkSceneTemplate(0, -1, String.Empty, Vector3.zero, null));
+        NodeNetworkSceneTemplate nodeTemplate = (GetRegisteredScene(sceneName) ?? new NodeNetworkSceneTemplate(0, -1, String.Empty, RPCVector3.zero, null));
         callbackRPC.data = nodeTemplate.ToByteArray();
         networkObject.SendRpc(pArgs.Info.SendingPlayer, RPC_RECEIVE_LOOKUP_SCENE, nodeTemplate.NodeId, callbackRPC.ObjectToByteArray());
     }

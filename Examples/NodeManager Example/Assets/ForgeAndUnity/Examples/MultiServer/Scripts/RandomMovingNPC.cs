@@ -22,7 +22,14 @@ public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRP
     void Awake() {
         _meshRenderer = GetComponent<MeshRenderer>();
         _agent = GetComponent<NavMeshAgent>();
+        _agent.enabled = false;
         SetColor(new Color(Random.Range(0f, 255f), Random.Range(0f, 255f), Random.Range(0f, 255f)));
+    }
+
+    protected override void NetworkStart () {
+        base.NetworkStart();
+        _agent.enabled = true;
+        InvokeRepeating("MoveRandom", 1f, 2f);
     }
 
     void Update() {
@@ -33,7 +40,6 @@ public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRP
         if (networkObject.IsServer) {
             networkObject.position = transform.position;
             networkObject.rotation = transform.rotation;
-            InvokeRepeating("MoveRandom", 1f, 5f);
         } else {
             transform.position = networkObject.position;
             transform.rotation = networkObject.rotation;
@@ -52,7 +58,7 @@ public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRP
     }
 
     public void MoveRandom () {
-        _agent.Move(new Vector3(Random.Range(1f, 10f), 0f, Random.Range(1f, 10f)));
+        _agent.SetDestination(transform.position + new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f)));
     }
 
     #endregion

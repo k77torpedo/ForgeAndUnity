@@ -8,19 +8,19 @@ public class NetworkSceneTemplate : IRPCSerializable<RPCNetworkSceneTemplate> {
     //Fields
     [SerializeField] protected int                          _buildIndex;
     [SerializeField] protected string                       _sceneName;
-    [SerializeField] protected Vector3                      _sceneOffset;
+    [SerializeField] protected RPCVector3                   _sceneOffset;
     [SerializeField] protected NetworkSceneManagerSetting   _settings;
 
     public int                                              BuildIndex          { get { return _buildIndex; } set { _buildIndex = value; } }
     public string                                           SceneName           { get { return _sceneName; } set { _sceneName = value; } }
-    public Vector3                                          SceneOffset         { get { return _sceneOffset; } set { _sceneOffset = value; } }
+    public RPCVector3                                       SceneOffset         { get { return _sceneOffset; } set { _sceneOffset = value; } }
     public NetworkSceneManagerSetting                       Settings            { get { return _settings; } set { _settings = value; } }
 
 
     //Functions
-    public NetworkSceneTemplate () : this (-1, string.Empty, Vector3.zero, null) { }
+    public NetworkSceneTemplate () : this (-1, string.Empty, RPCVector3.zero, null) { }
 
-    public NetworkSceneTemplate (int pBuildIndex, string pSceneName, Vector3 pSceneOffset, NetworkSceneManagerSetting pSetting) {
+    public NetworkSceneTemplate (int pBuildIndex, string pSceneName, RPCVector3 pSceneOffset, NetworkSceneManagerSetting pSetting) {
         _buildIndex = pBuildIndex;
         _sceneName = pSceneName;
         _sceneOffset = pSceneOffset;
@@ -40,7 +40,7 @@ public class NetworkSceneTemplate : IRPCSerializable<RPCNetworkSceneTemplate> {
         return new RPCNetworkSceneTemplate() {
             buildIndex = _buildIndex,
             sceneName = _sceneName,
-            sceneOffset = _sceneOffset.ToRPC(),
+            sceneOffset = _sceneOffset,
             settings = ((_settings != null) ? _settings.ToRPC() : new RPCNetworkSceneManagerSetting())
         };
     }
@@ -48,7 +48,7 @@ public class NetworkSceneTemplate : IRPCSerializable<RPCNetworkSceneTemplate> {
     public virtual void FromRPC (RPCNetworkSceneTemplate pTemplateRPC) {
         _buildIndex = pTemplateRPC.buildIndex;
         _sceneName = pTemplateRPC.sceneName;
-        _sceneOffset = pTemplateRPC.sceneOffset.ToVector3();
+        _sceneOffset = pTemplateRPC.sceneOffset;
         _settings = new NetworkSceneManagerSetting(pTemplateRPC.settings);
     }
 

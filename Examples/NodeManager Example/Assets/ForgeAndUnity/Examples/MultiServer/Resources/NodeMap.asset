@@ -15,7 +15,7 @@ MonoBehaviour:
   nodeMap:
     _initWithNodes:
     - _nodeId: 1
-      _nodeName: Server_1
+      _nodeName: Node_1
       _isMasterNode: 1
       _dynamicPortMin: 16000
       _dynamicPortMax: 16099
@@ -94,7 +94,7 @@ MonoBehaviour:
             _ip: 
             _port: 0
     - _nodeId: 2
-      _nodeName: Server_2
+      _nodeName: Node_2
       _isMasterNode: 0
       _dynamicPortMin: 16100
       _dynamicPortMax: 16199
@@ -154,7 +154,7 @@ MonoBehaviour:
             _ip: 
             _port: 0
     - _nodeId: 3
-      _nodeName: Server_3
+      _nodeName: Node_3
       _isMasterNode: 0
       _dynamicPortMin: 16200
       _dynamicPortMax: 16299

@@ -12,9 +12,9 @@ public class NodeNetworkSceneTemplate : NetworkSceneTemplate {
 
 
     //Functions
-    public NodeNetworkSceneTemplate() : this(0, -1, string.Empty, Vector3.zero, null) { }
+    public NodeNetworkSceneTemplate() : this(0, -1, string.Empty, RPCVector3.zero, null) { }
 
-    public NodeNetworkSceneTemplate (uint pNodeId, int pBuildIndex, string pSceneName, Vector3 pSceneOffset, NetworkSceneManagerSetting pNetworkSceneManagerSetting)
+    public NodeNetworkSceneTemplate (uint pNodeId, int pBuildIndex, string pSceneName, RPCVector3 pSceneOffset, NetworkSceneManagerSetting pNetworkSceneManagerSetting)
         : base (pBuildIndex, pSceneName, pSceneOffset, pNetworkSceneManagerSetting) {
         _nodeId = pNodeId;
     }
