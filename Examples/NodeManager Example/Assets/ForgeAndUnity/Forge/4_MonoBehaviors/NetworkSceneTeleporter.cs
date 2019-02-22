@@ -138,7 +138,6 @@ public class NetworkSceneTeleporter : MonoBehaviour {
             DestroyPendingObject(pBehavior);
         } else {
             ServiceCallback<RPCInstantiateInNode, ServiceCallbackStateEnum> callback = NodeManager.Instance.InstantiateInNode(_nodeTemplate.NodeId, _nodeTemplate.SceneName, nObj.CreateCode, (pBehavior as IRPCSerializable), _teleportTarget.position, _teleportTarget.rotation);
-            BMSLogger.Instance.Log(callback.State.ToString());
             if (callback.State == ServiceCallbackStateEnum.AWAITING_RESPONSE) {
                 callback.OnResponseOfT += (pResponseTime, pResponseDataOfT, pSender) => {
                     Callback_InstantiateInNode(callback, pBehavior);
@@ -148,7 +147,14 @@ public class NetworkSceneTeleporter : MonoBehaviour {
     }
 
     protected virtual void DestroyPendingObject (NetworkBehavior pBehavior) {
-        GameObject.Destroy(pBehavior.gameObject);
+        INetworkSceneObject networkSceneObject = pBehavior as INetworkSceneObject;
+        INetworkScenePlayer networkScenePlayer = pBehavior as INetworkScenePlayer;
+        if (networkScenePlayer != null) {
+            pBehavior.gameObject.SetActive(false);
+            networkSceneObject.Manager.ChangePlayerNetworkScene(_nodeTemplate, networkScenePlayer.Player);
+        }
+
+        networkSceneObject.GetNetworkObject().Destroy();
     }
     #endregion
 

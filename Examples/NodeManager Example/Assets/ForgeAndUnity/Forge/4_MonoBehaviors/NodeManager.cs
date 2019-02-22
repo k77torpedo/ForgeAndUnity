@@ -108,6 +108,7 @@ public class NodeManager : MonoBehaviour {
         UnloadNetworkScenes(true, true);
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        Disconnect();
     }
 
     protected virtual void OnApplicationQuit () {
@@ -161,16 +162,8 @@ public class NodeManager : MonoBehaviour {
         CreateNetworkScenes(_currentNode.InitWithNetworkScenes, true);
     }
 
-    public virtual void StartAsClient (uint pNodeId, string pStartSceneName) {
-        StartAsClient(_nodeMapSO.nodeMap.GetByNodeId(pNodeId), pStartSceneName);
-    }
-
-    public virtual void StartAsClient (string pNodeName, string pStartSceneName) {
-        StartAsClient(_nodeMapSO.nodeMap.GetByNodeName(pNodeName), pStartSceneName);
-    }
-
-    public virtual void StartAsClient (Node pNode, string pStartSceneName) {
-        StartAsClient(pNode.GetBySceneName(pStartSceneName));
+    public virtual void StartAsClient (string pStartSceneName) {
+        StartAsClient(_nodeMapSO.nodeMap.GetTemplateBySceneName(pStartSceneName));
     }
 
     public virtual void StartAsClient (NetworkSceneTemplate pTemplate) {
@@ -539,7 +532,7 @@ public class NodeManager : MonoBehaviour {
         return true;
     }
 
-    public virtual NetworkSceneManager GetNetworkSceneManager (string pSceneName) {
+    public virtual NetworkSceneManager FindNetworkSceneManager (string pSceneName) {
         NetworkSceneItem item = FindNetworkSceneItem(pSceneName, true, true);
         if (item == null || !item.HasManager) {
             return null;
@@ -573,8 +566,8 @@ public class NodeManager : MonoBehaviour {
 
     #region Disconnect
     public virtual void Disconnect () {
-        if (HasMasterManager && _masterManager.HasNetworker) {
-            _masterManager.Disconnect();
+        if (HasMasterManager) {
+            SceneManager.UnloadSceneAsync(_masterManager.gameObject.scene.name);
         }
     }
 
@@ -617,9 +610,12 @@ public class NodeManager : MonoBehaviour {
         RaisePlayerChangingNetworkSceneCompleted(item);
     }
 
-    public virtual void PlayerChangingSceneFailed (NetworkSceneItem item) {
-        item.OnReady -= PlayerChangingSceneSucceeded;
-        item.OnUnloaded -= PlayerChangingSceneFailed;
+    public virtual void PlayerChangingSceneFailed (NetworkSceneItem item = null) {
+        if (item != null) {
+            item.OnReady -= PlayerChangingSceneSucceeded;
+            item.OnUnloaded -= PlayerChangingSceneFailed;
+        }
+
         RaisePlayerChangingNetworkSceneFailed(item);
     }
 

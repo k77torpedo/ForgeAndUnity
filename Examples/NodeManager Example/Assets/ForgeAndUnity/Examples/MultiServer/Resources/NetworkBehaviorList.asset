@@ -21,3 +21,7 @@ MonoBehaviour:
       _name: RandomMovingNPC
       _networkBehavior: {fileID: 3534149121963320426, guid: 76461ea17ca8aa949999c1690a606e95,
         type: 3}
+    - _createCode: 2
+      _name: MultiServerPlayer
+      _networkBehavior: {fileID: 851525129896388674, guid: 05c209d73a4f0414799003bec65297b4,
+        type: 3}

@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"string\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"guid\"]]")]
-	public abstract partial class PlayerBehavior : NetworkBehavior
+	[GeneratedRPC("{\"types\":[[\"byte[]\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"data\"]]")]
+	public abstract partial class MultiServerPlayerBehavior : NetworkBehavior
 	{
-		public const byte RPC_GET_PLAYER_G_U_I_D = 0 + 5;
+		public const byte RPC_CHECK_MULTI_SERVER_PLAYER_ID = 0 + 5;
 		
-		public PlayerNetworkObject networkObject = null;
+		public MultiServerPlayerNetworkObject networkObject = null;
 
 		public override void Initialize(NetworkObject obj)
 		{
@@ -18,11 +18,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (networkObject != null && networkObject.AttachedBehavior != null)
 				return;
 			
-			networkObject = (PlayerNetworkObject)obj;
+			networkObject = (MultiServerPlayerNetworkObject)obj;
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("GetPlayerGUID", GetPlayerGUID, typeof(string));
+			networkObject.RegisterRpc("CheckMultiServerPlayerId", CheckMultiServerPlayerId, typeof(byte[]));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -80,7 +80,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override void Initialize(NetWorker networker, byte[] metadata = null)
 		{
-			Initialize(new PlayerNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
+			Initialize(new MultiServerPlayerNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
 		}
 
 		private void DestroyGameObject(NetWorker sender)
@@ -91,7 +91,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override NetworkObject CreateNetworkObject(NetWorker networker, int createCode, byte[] metadata = null)
 		{
-			return new PlayerNetworkObject(networker, this, createCode, metadata);
+			return new MultiServerPlayerNetworkObject(networker, this, createCode, metadata);
 		}
 
 		protected override void InitializedTransform()
@@ -101,9 +101,9 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		/// <summary>
 		/// Arguments:
-		/// string guid
+		/// byte[] data
 		/// </summary>
-		public abstract void GetPlayerGUID(RpcArgs args);
+		public abstract void CheckMultiServerPlayerId(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

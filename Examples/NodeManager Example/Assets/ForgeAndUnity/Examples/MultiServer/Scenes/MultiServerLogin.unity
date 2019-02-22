@@ -179,15 +179,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2911906771201912444, guid: 3bfb4f2fe14c62443858019b36147ca3,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2911906770944293572, guid: 3bfb4f2fe14c62443858019b36147ca3,
-        type: 3}
-      propertyPath: _autoReconnectMasterManagerInterval
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3bfb4f2fe14c62443858019b36147ca3, type: 3}

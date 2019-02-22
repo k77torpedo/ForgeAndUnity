@@ -86,6 +86,14 @@ public class NetworkSceneManager : MonoBehaviour {
     }
 
     protected virtual void OnDestroy () {
+        if (_networker != null) {
+            if (_networker.IsServer) {
+                UnregisterEventsServer();
+            } else {
+                UnregisterEventsClient();
+            }
+        }
+
         Disconnect();
     }
 
@@ -585,6 +593,10 @@ public class NetworkSceneManager : MonoBehaviour {
         }
 
         MainThreadManager.Run(() => {
+            if (behavior == null || gameObject == null) {
+                return;
+            }
+
             SceneManager.MoveGameObjectToScene(behavior.gameObject, gameObject.scene);
         });
     }
