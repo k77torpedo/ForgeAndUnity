@@ -31,7 +31,7 @@ public class NetworkSceneTeleporter : MonoBehaviour {
         _pendingObjects = new Dictionary<uint, NetworkBehavior>();
         _findSceneDelay = new DelayFixedTime(GameTime.FixedTimeUpdater());
         if (_nodeTemplate == null) {
-            FindNetworkSceneTemplate();
+            FindNetworkSceneTemplate(_sceneName);
         }
     }
 
@@ -42,23 +42,33 @@ public class NetworkSceneTeleporter : MonoBehaviour {
 
         AddPendingObject(pOther.gameObject);
         if (_nodeTemplate == null) {
-            FindNetworkSceneTemplate();
-        } else {
-            TeleportPendingObjects();
+            FindNetworkSceneTemplate(_sceneName);
+        }
+
+        if (_nodeTemplate != null) {
+            TeleportPendingObjects(_nodeTemplate);
+        }
+    }
+
+    protected virtual void OnDestroy () {
+        // If a lookup is still going on we need to be sure to unsubscribe from any events
+        if (_currentLookup != null) {
+            _currentLookup.OnResponseOfT -= CurrentLookup_OnResponseOfT;
+            _currentLookup.OnTimeout -= CurrentLookup_OnTimeout;
         }
     }
 
     #endregion
 
     #region Helpers
-    public virtual void FindNetworkSceneTemplate () {
-        if (_nodeTemplate != null || !NodeManager.IsInitialized || !NodeManager.Instance.IsServer || _currentLookup != null || !_findSceneDelay.HasPassed) {
+    public virtual void FindNetworkSceneTemplate (string pSceneName) {
+        if (!NodeManager.IsInitialized || !NodeManager.Instance.IsServer || _currentLookup != null || !_findSceneDelay.HasPassed) {
             return;
         }
 
         // Lookup if the scene resides on our Node
         if (_nodeTemplate == null) {
-            NetworkSceneTemplate foundTemplate = NodeManager.Instance.FindNetworkSceneTemplate(_sceneName, false, true, true, false);
+            NetworkSceneTemplate foundTemplate = NodeManager.Instance.FindNetworkSceneTemplate(pSceneName, false, true, true, false);
             if (foundTemplate != null) {
                 _nodeTemplate = new NodeNetworkSceneTemplate(NodeManager.Instance.CurrentNode.NodeId, foundTemplate);
                 return;
@@ -67,7 +77,7 @@ public class NetworkSceneTeleporter : MonoBehaviour {
 
         // Lookup the NodeMap if there is a static NetworkScene we can find on another Node
         if (_nodeTemplate == null && NodeManager.Instance.NodeMapSO != null) {
-            _nodeTemplate = NodeManager.Instance.NodeMapSO.nodeMap.GetNodeTemplateBySceneName(_sceneName);
+            _nodeTemplate = NodeManager.Instance.NodeMapSO.nodeMap.GetNodeTemplateBySceneName(pSceneName);
             if (_nodeTemplate != null) {
                 return;
             }
@@ -75,7 +85,7 @@ public class NetworkSceneTeleporter : MonoBehaviour {
 
         // Lookup if the scene is a dynamic NetworkScene on another Node
         if (_nodeTemplate == null && _enableLookup && _currentLookup == null) {
-            _currentLookup = NodeManager.Instance.LookUpNetworkSceneTemplate(_sceneName);
+            _currentLookup = NodeManager.Instance.LookUpNetworkSceneTemplate(pSceneName);
             if (_currentLookup.State == ServiceCallbackStateEnum.RESPONSE_SUCCESS) {
                 _nodeTemplate = _currentLookup.ResponseDataOfT;
                 _currentLookup = null;
@@ -98,28 +108,32 @@ public class NetworkSceneTeleporter : MonoBehaviour {
         }
 
         INetworkSceneObject networkSceneObject = behavior as INetworkSceneObject;
+        if (networkSceneObject == null) {
+            return;
+        }
+
         uint networkId = networkSceneObject.GetNetworkId();
-        if (networkSceneObject == null || _pendingObjects.ContainsKey(networkId)) {
+        if (_pendingObjects.ContainsKey(networkId)) {
             return;
         }
 
         _pendingObjects.Add(networkId, behavior);
     }
 
-    protected virtual void TeleportPendingObjects () {
-        if (_nodeTemplate == null || !NodeManager.IsInitialized || !NodeManager.Instance.IsServer) {
+    public virtual void TeleportPendingObjects (NodeNetworkSceneTemplate pNodeTemplate) {
+        if (pNodeTemplate == null || !NodeManager.IsInitialized || !NodeManager.Instance.IsServer) {
             return;
         }
 
         foreach (var item in _pendingObjects.Values) {
-            InstantiatePendingObject(item);
+            InstantiatePendingObject(pNodeTemplate, item);
         }
 
         _pendingObjects.Clear();
     }
 
-    protected virtual void InstantiatePendingObject(NetworkBehavior pBehavior) {
-        if (pBehavior == null) {
+    public virtual void InstantiatePendingObject (NodeNetworkSceneTemplate pNodeTemplate, NetworkBehavior pBehavior) {
+        if (pNodeTemplate == null || pBehavior == null) {
             return;
         }
 
@@ -129,41 +143,66 @@ public class NetworkSceneTeleporter : MonoBehaviour {
             return;
         }
 
-        if (_nodeTemplate.NodeId == NodeManager.Instance.CurrentNode.NodeId) {
-            NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(_nodeTemplate.SceneName, nObj.CreateCode, (pBehavior as IRPCSerializable), _teleportTarget.position, _teleportTarget.rotation);
+        if (pNodeTemplate.NodeId == NodeManager.Instance.CurrentNode.NodeId) {
+            NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(pNodeTemplate.SceneName, nObj.CreateCode, (pBehavior as IRPCSerializable), _teleportTarget.position, _teleportTarget.rotation);
             if (behavior == null) {
                 return;
             }
 
             DestroyPendingObject(pBehavior);
         } else {
-            ServiceCallback<RPCInstantiateInNode, ServiceCallbackStateEnum> callback = NodeManager.Instance.InstantiateInNode(_nodeTemplate.NodeId, _nodeTemplate.SceneName, nObj.CreateCode, (pBehavior as IRPCSerializable), _teleportTarget.position, _teleportTarget.rotation);
+            ServiceCallback<RPCInstantiateInNode, ServiceCallbackStateEnum> callback = NodeManager.Instance.InstantiateInNode(pNodeTemplate.NodeId, pNodeTemplate.SceneName, nObj.CreateCode, (pBehavior as IRPCSerializable), _teleportTarget.position, _teleportTarget.rotation);
             if (callback.State == ServiceCallbackStateEnum.AWAITING_RESPONSE) {
+                // While the request is progressing this object could be destroyed.
+                NetworkSceneTeleporter tmpTeleporter = this;
                 callback.OnResponseOfT += (pResponseTime, pResponseDataOfT, pSender) => {
-                    Callback_InstantiateInNode(callback, pBehavior);
+                    if (tmpTeleporter == null || pBehavior == null) {
+                        return;
+                    }
+
+                    if (pResponseDataOfT == ServiceCallbackStateEnum.RESPONSE_SUCCESS) {
+                        tmpTeleporter.DestroyPendingObject(pBehavior);
+                    }
                 };
             }
         }
     }
 
-    protected virtual void DestroyPendingObject (NetworkBehavior pBehavior) {
+    public virtual void DestroyPendingObject (NetworkBehavior pBehavior) {
         INetworkSceneObject networkSceneObject = pBehavior as INetworkSceneObject;
         INetworkScenePlayer networkScenePlayer = pBehavior as INetworkScenePlayer;
-        if (networkScenePlayer != null) {
+        if (networkScenePlayer != null && networkSceneObject.Manager != null) {
             pBehavior.gameObject.SetActive(false);
             networkSceneObject.Manager.ChangePlayerNetworkScene(_nodeTemplate, networkScenePlayer.Player);
         }
 
-        networkSceneObject.GetNetworkObject().Destroy();
+        //Todo
+        NetworkObject nObj = networkSceneObject.GetNetworkObject();
+        if (nObj == null) {
+            return;
+        }
+
+        nObj.Destroy();
     }
+
     #endregion
 
     #region Events
-    protected virtual void CurrentLookup_OnResponseOfT (float pResponseTime, NodeNetworkSceneTemplate pResponseDataOfT, ServiceCallback<NodeNetworkSceneTemplate> pSender) {
+    protected virtual void CurrentLookup_OnResponseOfT (float pResponseTime, NodeNetworkSceneTemplate pResponseDataOfT, ServiceCallback<NodeNetworkSceneTemplate> pCallback) {
         _currentLookup.OnResponseOfT -= CurrentLookup_OnResponseOfT;
         _currentLookup.OnTimeout -= CurrentLookup_OnTimeout;
         _currentLookup = null;
-        _nodeTemplate = pResponseDataOfT;
+
+        // Only assign our result if there has been nothing found in the meantime!
+        if (_nodeTemplate == null && pCallback.State == ServiceCallbackStateEnum.RESPONSE_SUCCESS) {
+            _nodeTemplate = pResponseDataOfT;
+        }
+
+        if (_nodeTemplate == null) {
+            _pendingObjects.Clear();
+        } else {
+            TeleportPendingObjects(_nodeTemplate);
+        }
     }
 
     protected virtual void CurrentLookup_OnTimeout (ServiceCallback pSender) {
@@ -171,16 +210,6 @@ public class NetworkSceneTeleporter : MonoBehaviour {
         _currentLookup.OnTimeout -= CurrentLookup_OnTimeout;
         _currentLookup = null;
         _pendingObjects.Clear();
-    }
-
-    protected virtual void Callback_InstantiateInNode (ServiceCallback<RPCInstantiateInNode, ServiceCallbackStateEnum> pCallback, NetworkBehavior pBehavior) {
-        if (pBehavior == null) {
-            return;
-        }
-
-        if (pCallback.ResponseDataOfT == ServiceCallbackStateEnum.RESPONSE_SUCCESS) {
-            DestroyPendingObject(pBehavior);
-        }
     }
 
     #endregion

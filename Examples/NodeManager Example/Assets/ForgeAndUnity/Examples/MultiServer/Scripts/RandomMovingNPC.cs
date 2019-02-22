@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking;
@@ -11,10 +9,10 @@ using BeardedManStudios.Forge.Networking;
 [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody), typeof(NavMeshAgent))]
 public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRPCSerializable {
     //Fields
-    MeshRenderer _meshRenderer;
-    NavMeshAgent _agent;
+    MeshRenderer                        _meshRenderer;
+    NavMeshAgent                        _agent;
 
-    public NetworkSceneManager Manager { get; set; }
+    public NetworkSceneManager          Manager             { get; set; }
 
     //Events
     public delegate void SendColorEvent (RpcArgs pArgs);

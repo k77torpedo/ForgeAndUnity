@@ -98,10 +98,10 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
             RegisterEventsClient();
         }
 
-        // We register this node
+        // We register this Node on the MasterNode
         RegisterNode(NodeManager.Instance.CurrentNode.NodeId);
 
-        // Start by sending over all dynamic scenes over to the MasterServer
+        // Start by sending over all dynamic scenes over to the MasterNode
         foreach (var item in NodeManager.Instance.ScenesDynamic.Values) {
             NodeManager.Instance.RegisterDynamicScene(item.SceneTemplate);
         }
@@ -217,11 +217,11 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnRegisterNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnRegisterNode_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
@@ -281,11 +281,11 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnRegisterScene_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnRegisterScene_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
@@ -344,22 +344,22 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnUnregisterScene_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnUnregisterScene_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
 
     #region ConfirmScene
     protected virtual void OnConfirmScene_Server (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnConfirmScene_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnConfirmScene_ServerClient (RpcArgs pArgs) {
@@ -429,22 +429,22 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnLookupScene_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnLookupScene_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
 
     #region ReceiveLookupScene
     protected virtual void OnReceiveLookupScene_Server (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnReceiveLookupScene_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnReceiveLookupScene_ServerClient (RpcArgs pArgs) {
@@ -525,22 +525,22 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnRelayInstantiateInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnRelayInstantiateInNode_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
 
     #region InstantiateInNode
     protected virtual void OnInstantiateInNode_Server (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnInstantiateInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnInstantiateInNode_ServerClient (RpcArgs pArgs) {
@@ -581,22 +581,22 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnRelayConfirmInstantiateInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnRelayConfirmInstantiateInNode_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
 
     #region ConfirmInstantiateInNode
     protected virtual void OnConfirmInstantiateInNode_Server (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnConfirmInstantiateInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnConfirmInstantiateInNode_ServerClient (RpcArgs pArgs) {
@@ -664,22 +664,22 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnRelayCreateNetworkSceneInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnRelayCreateNetworkSceneInNode_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
 
     #region InstantiateInNode
     protected virtual void OnCreateNetworkSceneInNode_Server (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnCreateNetworkSceneInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnCreateNetworkSceneInNode_ServerClient (RpcArgs pArgs) {
@@ -725,22 +725,22 @@ public class NodeService : NodeServiceBehavior, INetworkSceneObject {
     }
 
     protected virtual void OnRelayConfirmCreateNetworkSceneInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnRelayConfirmCreateNetworkSceneInNode_ServerClient (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     #endregion
 
     #region ConfirmInstantiateInNode
     protected virtual void OnConfirmCreateNetworkSceneInNode_Server (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnConfirmCreateNetworkSceneInNode_Client (RpcArgs pArgs) {
-
+        // your code here...
     }
 
     protected virtual void OnConfirmCreateNetworkSceneInNode_ServerClient (RpcArgs pArgs) {
