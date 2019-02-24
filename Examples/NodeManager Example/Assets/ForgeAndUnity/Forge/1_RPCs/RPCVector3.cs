@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ForgeAndUnity.Forge {
 
     /// <summary>
     /// Lightweight container for serializing and deserializing <see cref="Vector3"/> over RPCs.
     /// </summary>
-    [System.Serializable]
-    public struct RPCVector3 {
+    [Serializable]
+    public struct RPCVector3 : IEquatable<RPCVector3> {
         //Fields
         public static RPCVector3 zero = new RPCVector3() { x = 0f, y = 0f, z = 0f };
         public static RPCVector3 one = new RPCVector3() { x = 1f, y = 1f, z = 1f };
@@ -33,6 +34,23 @@ namespace ForgeAndUnity.Forge {
 
         public Vector3 ToVector3 () {
             return new Vector3(x, y, z);
+        }
+
+        public override bool Equals (object pObj) {
+            return pObj is RPCVector3 && Equals((RPCVector3)pObj);
+        }
+
+        public bool Equals (RPCVector3 pOther) {
+            return pOther == this;
+        }
+
+        public override int GetHashCode () {
+            var hashCode = 373119288;
+            hashCode = hashCode * -1521134295 + base.GetHashCode();
+            hashCode = hashCode * -1521134295 + x.GetHashCode();
+            hashCode = hashCode * -1521134295 + y.GetHashCode();
+            hashCode = hashCode * -1521134295 + z.GetHashCode();
+            return hashCode;
         }
     }
 }
