@@ -1,16 +1,10 @@
 ##### ForgeAndUnity
 My personal arsenal of helper-classes and workarounds I came across during my developement with Forge Networking Remastered. Also some general purpose stuff I like to share.
 
----
----
----
-
-# DISCLAIMERS
+# DISCLAIMER
 ### Using this project in any test- or productive-environment is at your own discretion!
 ### This project is still in heavy developement and large parts may change at any point in time.
 
----
----
 ---
 
 ## What is it?
@@ -63,6 +57,10 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 
 6) Press Start!
 
+## Overview
+![Overview abstract](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Overview.jpeg "Overview abstract")
+
+![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
 
 # MIT License
 Copyright (c) 2018 k77torpedo
