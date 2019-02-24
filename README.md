@@ -39,6 +39,8 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 *The term "NetworkScene" describes a Unity-Scene with a `NetworkManager` that is only handling the `NetworkBehaviors` in that Unity-Scene.
 
 ## Installation and Setup
+I recommend at least Unity 2018.3.6f1. If you have issues try upgrading to this or a higher version of Unity.
+
 1) Create a new and empty Unity-Project.
 
 2) Import the latest version of the "Forge Networking Remastered"-unitypackage into the empty Unity-Project from the official GitHub-Page found here: https://github.com/BeardedManStudios/ForgeNetworkingRemastered
@@ -51,10 +53,13 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 
 ![Setup Image](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Setup.JPG "Setup Image")
 
+5) You need to recompile the `NetworkBehaviors` in Forge Networking Remastered in order for the `NetworkBehaviors` to work. To do so you simply need to save any `NetworkBehavior` in the Network Contract Wizard as shown below:
 
-5) Open the `Login`-scene in the Unity-Editor.
+![Recompile](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Compile%20Forge.jpg "Recompile")
 
-6) Press Start!
+6) Open the `Login`-scene in the Unity-Editor.
+
+7) Press Start!
 
 ## Overview
 ![Overview abstract](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Overview.jpeg "Overview abstract")
