@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using BeardedManStudios.Forge.Networking;
@@ -46,6 +47,7 @@ namespace ForgeAndUnity.Forge {
         protected HandlerPoolUShort                             _usedDynamicPorts;
         protected CacheList<NetworkSceneItem, float>            _pendingScenes;
         protected bool                                          _isServer;
+        protected IEnumerator                                   _updatePendingScenes;
 
         public NodeMapSO                                        NodeMapSO                                   { get { return _nodeMapSO; } }
         public NetworkBehaviorListSO                            ServiceNetworkSceneBehaviorListSO           { get { return _serviceNetworkSceneBehaviorListSO; } }
@@ -92,6 +94,7 @@ namespace ForgeAndUnity.Forge {
             _usedDynamicPorts = new HandlerPoolUShort();
             _pendingScenes = new CacheList<NetworkSceneItem, float>(new DelayFixedTime(GameTime.FixedTimeUpdater()), CACHE_LIFETIME_PENDING_SCENES);
             _pendingScenes.OnCacheItemExpired += PendingScenes_OnCacheItemExpired;
+            _updatePendingScenes = _pendingScenes.UpdateCoroutine();
             if (_nodeMapSO != null) {
                 _nodeMapSO.nodeMap.Init();
             }
@@ -106,6 +109,10 @@ namespace ForgeAndUnity.Forge {
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        protected virtual void Update () {
+            _updatePendingScenes.MoveNext();
         }
 
         protected virtual void OnDestroy () {
@@ -624,6 +631,7 @@ namespace ForgeAndUnity.Forge {
         }
 
         protected virtual void PendingScenes_OnCacheItemExpired (int pIndex, CacheItem<NetworkSceneItem, float> pItem) {
+            Debug.Log("Expired!");
             RaisePendingSceneTimeout(pIndex, pItem.Value);
         }
 
