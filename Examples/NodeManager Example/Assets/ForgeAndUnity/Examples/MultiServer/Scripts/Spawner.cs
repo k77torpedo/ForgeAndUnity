@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using BeardedManStudios.Forge.Networking.Unity;
+using ForgeAndUnity.Forge;
 
 /// <summary>
 /// Creates <see cref="NetworkBehavior"/>s.

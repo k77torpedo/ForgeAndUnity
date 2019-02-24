@@ -2,6 +2,7 @@
 using UnityEngine.AI;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking;
+using ForgeAndUnity.Forge;
 
 /// <summary>
 /// Can be controlled by any <see cref="NetworkingPlayer"/> if he has a matching <see cref="PlayerToken"/>.

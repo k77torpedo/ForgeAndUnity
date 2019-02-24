@@ -2,6 +2,7 @@
 using UnityEngine.AI;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking;
+using ForgeAndUnity.Forge;
 
 /// <summary>
 /// A <see cref="NetworkBehavior"/> that moves randomly and maintains its <see cref="Color"/> across NetworkScenes.

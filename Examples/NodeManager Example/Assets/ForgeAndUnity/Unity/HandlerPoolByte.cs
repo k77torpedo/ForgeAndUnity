@@ -1,13 +1,16 @@
-﻿/// <summary>
-/// Class for generating identifiers for various needs like sessionIDs, EntityIDs, HandlerIDs etc.
-/// </summary>
-public class HandlerPoolByte : HandlerPoolBaseOfT<byte> {
-    //Functions
-    public HandlerPoolByte () : this(byte.MinValue, byte.MaxValue) { }
+﻿namespace ForgeAndUnity.Unity {
 
-    public HandlerPoolByte (byte pLowerBounds, byte pUpperBounds, byte pStartIdentifier = default(byte), bool pUseFreeIds = true) : base (pLowerBounds, pUpperBounds, pStartIdentifier, pUseFreeIds) { }
+    /// <summary>
+    /// Class for generating identifiers for various needs like sessionIDs, EntityIDs, HandlerIDs etc.
+    /// </summary>
+    public class HandlerPoolByte : HandlerPoolBaseOfT<byte> {
+        //Functions
+        public HandlerPoolByte () : this(byte.MinValue, byte.MaxValue) { }
 
-    protected override byte NextIdentifierIncrement (byte pNextIdentifier) {
-        return (byte)(pNextIdentifier + 1);
+        public HandlerPoolByte (byte pLowerBounds, byte pUpperBounds, byte pStartIdentifier = default(byte), bool pUseFreeIds = true) : base(pLowerBounds, pUpperBounds, pStartIdentifier, pUseFreeIds) { }
+
+        protected override byte NextIdentifierIncrement (byte pNextIdentifier) {
+            return (byte)(pNextIdentifier + 1);
+        }
     }
 }

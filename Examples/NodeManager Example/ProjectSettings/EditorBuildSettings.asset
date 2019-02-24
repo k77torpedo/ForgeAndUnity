@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/ForgeAndUnity/Examples/MultiServer/Scenes/MultiServerLogin.unity
+    path: Assets/ForgeAndUnity/Examples/MultiServer/Scenes/Login.unity
     guid: 0f649d8856d69b741b01e7d90e8ac0f8
   - enabled: 1
     path: Assets/ForgeAndUnity/Examples/MultiServer/Scenes/Template_StartScene.unity

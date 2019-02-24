@@ -1,34 +1,37 @@
 ﻿using System;
 using UnityEngine;
 
-/// <summary>
-/// Wrapper for Unity-<see cref="Time"/> variables.
-/// </summary>
-public static class GameTime {
-	//Fields
-    public static float fixedTime {
-		get { return Time.fixedTime; }
-	}
+namespace ForgeAndUnity.Unity {
 
-	public static float deltaTime {
-		get { return Time.deltaTime; }
-	}
+    /// <summary>
+    /// Wrapper for Unity-<see cref="Time"/> variables.
+    /// </summary>
+    public static class GameTime {
+        //Fields
+        public static float fixedTime {
+            get { return Time.fixedTime; }
+        }
 
-	public static float fixedDeltaTime {
-		get { return Time.fixedDeltaTime; }
-	}
+        public static float deltaTime {
+            get { return Time.deltaTime; }
+        }
+
+        public static float fixedDeltaTime {
+            get { return Time.fixedDeltaTime; }
+        }
 
 
-    //Functions
-    public static Func<float> DeltaTimeUpdater () {
-		return () => { return deltaTime; };
-    }
+        //Functions
+        public static Func<float> DeltaTimeUpdater () {
+            return () => { return deltaTime; };
+        }
 
-	public static Func<float> FixedDeltaTimeUpdater () {
-		return () => { return fixedDeltaTime; };
-    }
+        public static Func<float> FixedDeltaTimeUpdater () {
+            return () => { return fixedDeltaTime; };
+        }
 
-    public static Func<float> FixedTimeUpdater () {
-        return () => { return fixedTime; };
+        public static Func<float> FixedTimeUpdater () {
+            return () => { return fixedTime; };
+        }
     }
 }

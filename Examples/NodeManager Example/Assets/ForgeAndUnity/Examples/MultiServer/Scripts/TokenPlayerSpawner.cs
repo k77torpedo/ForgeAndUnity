@@ -2,6 +2,7 @@
 using UnityEngine;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Unity;
+using ForgeAndUnity.Forge;
 
 /// <summary>
 /// Creates a new <see cref="TokenPlayer"/> when a <see cref="NetworkingPlayer"/> connects to 
