@@ -54,9 +54,12 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 
 3) Import the `ForgeAndUnity.unitypackage` into the the project.
 
-4) Register the Unity-Scenes in the `MultiServer`-Example-Project in the BuildSettings like shown below:
+4) Register the Unity-Scenes in the `MultiServer`-Example-Project in the BuildSettings like shown below: 
 
-5) Open the `Login`-scene in the Unity-Inspector.
+![Setup Image](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Setup.JPG "Setup Image")
+
+
+5) Open the `Login`-scene in the Unity-Editor.
 
 6) Press Start!
 
