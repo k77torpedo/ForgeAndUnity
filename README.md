@@ -61,6 +61,10 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 
 ![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
 
+
+## More to come :)
+
+
 # MIT License
 Copyright (c) 2018 k77torpedo
 
