@@ -1,6 +1,3 @@
-##### ForgeAndUnity
-My personal arsenal of helper-classes and workarounds I came across during my developement with Forge Networking Remastered. Also some general purpose stuff I like to share.
-
 # DISCLAIMER
 ### Using this project in any test- or productive-environment is at your own discretion!
 ### This project is still in heavy developement and large parts may change at any point in time.
@@ -8,10 +5,10 @@ My personal arsenal of helper-classes and workarounds I came across during my de
 ---
 
 ## What is it?
-This project is an alternative implementation of the standard `NetworkManager` that comes out-of-the-box with Forge Networking Remastered as an attempt to provide functionality like a persistent world or dungeon instancing on one or more servers.
+This project is an alternative implementation of the standard `NetworkManager` that comes out-of-the-box with Forge Networking Remastered as an attempt to provide functionality like a persistent world or dungeon instancing in one or more servers.
 
 ## When to use it?
-* You need your game to be split up into smaller parts and/or want to run your game on multiple servers. 
+* You need your game to be split up into smaller parts and/or want to be able to run one game on multiple servers. 
 * You want your clients to only connect to and see one part of the world instead of everything. 
 * You want functionality like a persistent world or dungeon instances
 
@@ -25,7 +22,7 @@ Additionally, at the time of writing the native Steam-Integration of the standar
 Be aware that if you want to use this over the standard `NetworkManager` or not depends on the scope and features of your own project and is at your own discretion.
 
 ## Features
-* Scene-based `NetworkManager` for easy creation of `NetworkScenes*`
+* A Scene-based `NetworkManager` for easy creation of `NetworkScenes*`
 * Multiple `NetworkScenes*` per Server-Instance
 * Multiple Server-Instances (Can run the first 5 `NetworkScenes*` of your game on "Server_1" and another 3 `NetworkScenes*` on "Server_2")
 * Provides extendable interconnection between Server-Instances out-of-the-box without a database
@@ -42,13 +39,15 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 *The term "NetworkScene" describes a Unity-Scene with a `NetworkManager` that is only handling the `NetworkBehaviors` in that Unity-Scene.
 
 ## Installation and Setup
-1) Import the lates version of the Forge Networking Remastered unitypackage into an empty Unity-Project from the official GitHub-Page found here: https://github.com/BeardedManStudios/ForgeNetworkingRemastered
+1) Create a new and empty Unity-Project.
+
+2) Import the latest version of the "Forge Networking Remastered"-unitypackage into the empty Unity-Project from the official GitHub-Page found here: https://github.com/BeardedManStudios/ForgeNetworkingRemastered
 
 2) Download the `ForgeAndUnity.unitypackage` from here: https://github.com/k77torpedo/ForgeAndUnity/tree/master/UnityPackages
 
-3) Import the `ForgeAndUnity.unitypackage` into the the project.
+3) Import the `ForgeAndUnity.unitypackage` into the project.
 
-4) Register the Unity-Scenes in the `MultiServer`-Example-Project in the BuildSettings like shown below: 
+4) Register the Unity-Scenes found in the MultiServer-Example-Project in the BuildSettings and in the order shown below: 
 
 ![Setup Image](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Setup.JPG "Setup Image")
 
