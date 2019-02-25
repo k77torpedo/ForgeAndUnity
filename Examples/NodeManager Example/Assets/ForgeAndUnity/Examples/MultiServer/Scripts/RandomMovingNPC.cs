@@ -106,6 +106,10 @@ public class RandomMovingNPC : RandomMovingNPCBehavior, INetworkSceneObject, IRP
     }
 
     public void MoveRandom () {
+        if (!_agent.enabled) {
+            return;
+        }
+
         _agent.SetDestination(transform.position + new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f)));
     }
 
