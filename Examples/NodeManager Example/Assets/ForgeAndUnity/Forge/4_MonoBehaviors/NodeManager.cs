@@ -631,7 +631,6 @@ namespace ForgeAndUnity.Forge {
         }
 
         protected virtual void PendingScenes_OnCacheItemExpired (int pIndex, CacheItem<NetworkSceneItem, float> pItem) {
-            Debug.Log("Expired!");
             RaisePendingSceneTimeout(pIndex, pItem.Value);
         }
 

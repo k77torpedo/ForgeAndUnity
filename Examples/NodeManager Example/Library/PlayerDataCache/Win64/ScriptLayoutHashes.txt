@@ -205,3 +205,4 @@ c6666661329916e218bee7f5e79e60f5 Unity.TextMeshPro.dll:TMPro.TextMeshPro
 82965bb887f6c7ae8f8a98d948c5a124 Assembly-CSharp.dll:ForgeAndUnity.Forge.NodeManager
 8649814970b42d345b89944b862453cc Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
 dd545f3a27b67777b4515ce325031d58 Assembly-CSharp.dll:.MultiplayerMenu
+d5fbbb8eea3d7243ddcca27d6a032f62 Assembly-CSharp.dll:.DynamicNetworkSceneTeleporter
