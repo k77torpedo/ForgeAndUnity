@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ForgeAndUnity/Examples/MultiServer/Scenes/Login.unity
+- path: Assets/Bearded Man Studios Inc/Scenes/MultiplayerMenu.unity
   isLoaded: 1
   isActive: 1

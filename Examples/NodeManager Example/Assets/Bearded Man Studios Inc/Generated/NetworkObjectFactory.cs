@@ -55,6 +55,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new TokenPlayerNetworkObject(networker, id, frame);
 						break;
+					case InputListenerPlayerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new InputListenerPlayerNetworkObject(networker, id, frame);
+						break;
 				}
 
 				if (!availableCallback)
