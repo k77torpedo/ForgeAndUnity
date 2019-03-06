@@ -8,10 +8,11 @@ using ForgeAndUnity.Forge;
 public class InputListener {
     //Fields
     [SerializeField] protected float _speed;
-    [SerializeField] protected uint _currentFrame;
     [SerializeField] protected int _frameSyncRate;
     [SerializeField] protected float _reconcileDistance;
-    protected InputFrame _nextInputFrame;
+    protected uint _currentFrame;
+    protected InputFrame _lastInputFrame;
+    protected InputFrame _currentInputFrame;
     protected List<byte> _nextActions;
     protected List<InputFrame> _framesToPlay;
     protected List<InputFrame> _framesToSend;
@@ -22,7 +23,8 @@ public class InputListener {
     public uint CurrentFrame { get { return _currentFrame; } set { _currentFrame = value; } }
     public int FrameSyncRate { get { return _frameSyncRate; } set { _frameSyncRate = value; } }
     public float ReconcileDistance { get { return _reconcileDistance; } set { _reconcileDistance = value; } }
-    public InputFrame NextInputFrame { get { return _nextInputFrame; } }
+    public InputFrame LastInputFrame { get { return _lastInputFrame; } }
+    public InputFrame CurrentInputFrame { get { return _currentInputFrame; } }
     public List<InputFrame> FramesToPlay { get { return _framesToPlay; } }
     public List<InputFrame> FramesToSend { get { return _framesToSend; } }
     public List<InputFrameHistoryItem> LocalInputHistory { get { return _localInputHistory; } }
@@ -31,10 +33,14 @@ public class InputListener {
     //Events
     public delegate void SyncFrameEvent ();
     public event SyncFrameEvent OnSyncFrame;
-    public delegate void PerformMovementEvent (float pSpeed, InputFrame pInputFrame);
+    public delegate void PerformMovementEvent (float pSpeed, InputFrame pFrame);
     public event PerformMovementEvent OnPerformMovement;
-    public delegate void PerformActionEvent (InputFrame pInputFrame);
+    public delegate void ReconcileMovementEvent (float pSpeed, InputFrame pCurrentFrame);
+    public event ReconcileMovementEvent OnReconcileMovement;
+    public delegate void PerformActionEvent (InputFrame pFrame);
     public event PerformActionEvent OnPerformAction;
+    public delegate void ReconcileActionEvent (InputFrame pCurrentFrame);
+    public event ReconcileActionEvent OnReconcileAction;
 
 
     //Functions
@@ -51,9 +57,9 @@ public class InputListener {
         _frameSyncRate = pFrameSyncRate;
     }
 
-    public void RecordInput (float pHorizontalInput, float pVerticalInput) {
-        _nextInputFrame.horizontalInput = pHorizontalInput;
-        _nextInputFrame.verticalInput = pVerticalInput;
+    public void RecordMovement (float pHorizontalInput, float pVerticalInput) {
+        _currentInputFrame.horizontalMovement = pHorizontalInput;
+        _currentInputFrame.verticalMovement = pVerticalInput;
     }
 
     public void RecordAction (byte pActionId) {
@@ -62,18 +68,19 @@ public class InputListener {
 
     public void AdvanceFrame () {
         _currentFrame++;
-        _nextInputFrame.frame = _currentFrame;
+        _currentInputFrame.frame = _currentFrame;
     }
 
     public void SaveFrame () {
         if (_nextActions.Count > 0) {
-            _nextInputFrame.actions = _nextActions.ToArray();
+            _currentInputFrame.actions = _nextActions.ToArray();
             _nextActions.Clear();
         }
-        
-        _framesToPlay.Add(_nextInputFrame);
-        _framesToSend.Add(_nextInputFrame);
-        _nextInputFrame.actions = null;
+
+        _framesToPlay.Add(_currentInputFrame);
+        _framesToSend.Add(_currentInputFrame);
+        _lastInputFrame = _currentInputFrame;
+        _currentInputFrame.actions = null;
     }
 
     public void PlayFrame (Transform pTransform) {
@@ -104,19 +111,19 @@ public class InputListener {
                 continue;
             }
 
+            // TODO: A BUG LURKS DOWN HERE!
             if (GetHistoryDistance(serverItem, localItem) > _reconcileDistance) {
-                // New event for OnStartServerReconciliation
+                // TODO: New event for OnStartServerReconciliation
                 pTransform.position = new Vector3(serverItem.xPosition, serverItem.yPosition, serverItem.zPosition);
                 var itemsToReplay = _localInputHistory.Where(x => x.frame >= serverItem.frame);
-
                 foreach (var inputItemToReconcile in itemsToReplay) {
-                    // New Event for OnReconciliateFrame
-                    RaisePerformMovement(_speed, inputItemToReconcile.inputFrame);
-                    if (inputItemToReconcile.inputFrame.actions != null) {
-                        RaisePerformAction(inputItemToReconcile.inputFrame);
+                    RaiseReconcileMovement(_speed, inputItemToReconcile.inputFrame);
+                    if (inputItemToReconcile.inputFrame.HasActions) {
+                        RaiseReconcileAction(inputItemToReconcile.inputFrame);
                     }
                 }
 
+                //TODO: Dont we have to remove the reconciliated frames as well?
                 _localInputHistory.RemoveAt(localItemIndex);
             }
 
@@ -150,13 +157,13 @@ public class InputListener {
         return Vector3.Distance(localPosition, serverPosition);
     }
 
-    InputFrameHistoryItem GetMovementHistoryItem (InputFrame pInputFrame, float pXPosition, float pYPosition, float pZPosition) {
+    InputFrameHistoryItem GetMovementHistoryItem (InputFrame pFrame, float pXPosition, float pYPosition, float pZPosition) {
         InputFrameHistoryItem movementHistoryItem = new InputFrameHistoryItem() {
             xPosition = pXPosition,
             yPosition = pYPosition,
             zPosition = pZPosition,
-            frame = pInputFrame.frame,
-            inputFrame = pInputFrame
+            frame = pFrame.frame,
+            inputFrame = pFrame
         };
 
         return movementHistoryItem;
@@ -182,15 +189,27 @@ public class InputListener {
         }
     }
 
-    public void RaisePerformMovement (float pSpeed, InputFrame pInputFrame) {
+    public void RaisePerformMovement (float pSpeed, InputFrame pFrame) {
         if (OnPerformMovement != null) {
-            OnPerformMovement(pSpeed, pInputFrame);
+            OnPerformMovement(pSpeed, pFrame);
         }
     }
 
-    public void RaisePerformAction (InputFrame pInputFrame) {
+    public void RaiseReconcileMovement (float pSpeed, InputFrame pCurrentFrame) {
+        if (OnReconcileMovement != null) {
+            OnReconcileMovement(pSpeed, pCurrentFrame);
+        }
+    }
+
+    public void RaisePerformAction (InputFrame pFrame) {
         if (OnPerformAction != null) {
-            OnPerformAction(pInputFrame);
+            OnPerformAction(pFrame);
+        }
+    }
+
+    public void RaiseReconcileAction (InputFrame pCurrentFrame) {
+        if (OnReconcileAction != null) {
+            OnReconcileAction(pCurrentFrame);
         }
     }
 

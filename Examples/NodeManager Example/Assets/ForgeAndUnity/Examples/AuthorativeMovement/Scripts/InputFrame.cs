@@ -6,6 +6,9 @@ public struct InputFrame {
     //Fields
     public uint frame;
     public byte[] actions;
-    public float horizontalInput;
-    public float verticalInput;
+    public float horizontalMovement;
+    public float verticalMovement;
+
+    public bool HasMovement { get { return (horizontalMovement != 0f || verticalMovement != 0f); } }
+    public bool HasActions { get { return (actions != null && actions.Length > 0); } }
 }
