@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BeardedManStudios.Forge.Networking.Unity;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking;
 using ForgeAndUnity.Forge;
 
+
+// TODO: USE FIELDS INSTEAD OF RPC
 public class InputListenerPlayer : InputListenerPlayerBehavior {
     //Fields
     public InputListener _listener;
@@ -17,27 +20,28 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     #region Unity
     void Awake () {
         // We subscribe to the InputListener so we can use custom logic on how we actually want to move our GameObject or perform actions like jumping.
-        _listener.OnSyncFrame += InputListener_OnSyncFrame;
-        _listener.OnPerformMovement += InputListener_OnPerformMovement;
-        _listener.OnPerformAction += InputListener_OnPerformAction;
-
-        // For Server-Reconciliation we keep it simple and subscribe the same functions for performing movement and actions.
-        _listener.OnReconcileMovement += InputListener_OnPerformMovement;
-        _listener.OnReconcileAction += InputListener_OnPerformAction;
+        _listener.OnSyncFrame += SyncFrame;
+        _listener.OnPerformMovement += PerformMovement;
+        _listener.OnPerformAction += PerformAction;
+        _listener.OnReconcileFrames += ReconcileFrames;
     }
 
     void FixedUpdate () {
+        if (networkObject == null) {
+            return;
+        }
+
         // Everyone that is not the server or the controlling player will just set the position.
         if (!networkObject.IsServer && !networkObject.IsOwner) {
-            transform.position = networkObject.position;
+            _body.position = networkObject.position;
             return;
         }
 
         // We advance one frame in the simulation
         _listener.AdvanceFrame();
 
-        // The controlling player saves this Frame with his last input and action recorded.
-        if (networkObject.IsOwner && _listener.CurrentInputFrame.HasMovement) {
+        // The controlling player saves this Frame with his last input and action recorded.//(_listener.CurrentInputFrame.HasMovement || _listener.CurrentInputFrame.HasActions)
+        if (networkObject.IsOwner) {
             _listener.SaveFrame();
         }
 
@@ -46,18 +50,22 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
             _listener.PlayFrame(transform);
         }
 
-        // Reconcile Frames that have been deemed invalid by the server for the controlling player.
+        // Reconcile frames when the client is too far away from the server-position.
         if (networkObject.IsOwner) {
-            _listener.ReconcileFrames(transform);
+            _listener.ReconcileFrames();
         }
 
         // The server sets the position on the network for everybody else.
         if (networkObject.IsServer) {
-            networkObject.position = transform.position;
+            networkObject.position = _body.position;
         }
     }
 
     void Update () {
+        if (networkObject == null || networkObject.IsServer || !networkObject.IsOwner) {
+            return;
+        }
+
         // We record the players movement based on his input.
         _listener.RecordMovement(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
@@ -79,7 +87,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     #endregion
 
     #region Events
-    void InputListener_OnSyncFrame () {
+    void SyncFrame () {
         // The player sends the Frames he played to the server
         if (networkObject.IsOwner) {
             networkObject.SendRpc(RPC_SYNC_INPUTS, Receivers.Server, _listener.DequeueFramesToSend());
@@ -87,13 +95,12 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
 
         // The server sends back what he played to the controlling player.
         if (networkObject.IsServer) {
-            networkObject.SendRpc(networkObject.Owner, RPC_SYNC_INPUT_HISTORY, _listener.DequeueLocalInputHistory());
+            networkObject.SendRpcUnreliable(networkObject.Owner, RPC_SYNC_INPUT_HISTORY, _listener.DequeueLocalInputHistory());
         }
     }
 
-    void InputListener_OnPerformMovement (float pSpeed, InputFrame pInputFrame) {
-        // Here we provide an implementation on how we want our GameObject to move on input.
-        //transform.Translate(new Vector3(pInputFrame.horizontalInput * Time.fixedDeltaTime * pSpeed, 0f, pInputFrame.verticalInput * Time.fixedDeltaTime * pSpeed));
+    void PerformMovement (float pSpeed, InputFrame pInputFrame) {
+        // Here we provide an implementation on how we want our GameObject to move on input (server and client).
         Vector3 translation = Vector3.ClampMagnitude(new Vector3(pInputFrame.horizontalMovement, 0f, pInputFrame.verticalMovement) * pSpeed * Time.fixedDeltaTime, pSpeed);
         _body.position += translation;
         if (!_isJumping) {
@@ -101,8 +108,8 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         }
     }
 
-    void InputListener_OnPerformAction (InputFrame pInputFrame) {
-        // Here we provide an implementation for the actions we recorded.
+    void PerformAction (InputFrame pInputFrame) {
+        // Here we provide an implementation for the actions we recorded (server and client).
         for (int i = 0; i < pInputFrame.actions.Length; i++) {
             switch (pInputFrame.actions[i]) {
                 case 1:
@@ -111,6 +118,19 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
                     break;
                 default:
                     break;
+            }
+        }
+    }
+
+    void ReconcileFrames (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile) {
+        // Here we provide an implementation for the reconciling and replaying frames if anything went wrong.
+
+        // We set our current position to the servers-position and simply replay everything and then we should end up where the server is.
+        transform.position = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
+        foreach (var item in pItemsToReconcile) {
+            PerformMovement(_listener.Speed, item.inputFrame);
+            if (item.inputFrame.HasActions) {
+                PerformAction(item.inputFrame);
             }
         }
     }

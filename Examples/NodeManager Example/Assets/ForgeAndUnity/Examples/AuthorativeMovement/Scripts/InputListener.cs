@@ -35,12 +35,11 @@ public class InputListener {
     public event SyncFrameEvent OnSyncFrame;
     public delegate void PerformMovementEvent (float pSpeed, InputFrame pFrame);
     public event PerformMovementEvent OnPerformMovement;
-    public delegate void ReconcileMovementEvent (float pSpeed, InputFrame pCurrentFrame);
-    public event ReconcileMovementEvent OnReconcileMovement;
     public delegate void PerformActionEvent (InputFrame pFrame);
     public event PerformActionEvent OnPerformAction;
-    public delegate void ReconcileActionEvent (InputFrame pCurrentFrame);
-    public event ReconcileActionEvent OnReconcileAction;
+    public delegate void ReconcileFramesEvent (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile);
+    public event ReconcileFramesEvent OnReconcileFrames;
+
 
 
     //Functions
@@ -101,7 +100,7 @@ public class InputListener {
         }
     }
 
-    public void ReconcileFrames (Transform pTransform) {
+    public void ReconcileFrames () {
         while (_authorativeInputHistory.Count > 0) {
             InputFrameHistoryItem serverItem = _authorativeInputHistory[0];
             int localItemIndex;
@@ -111,20 +110,11 @@ public class InputListener {
                 continue;
             }
 
-            // TODO: A BUG LURKS DOWN HERE!
-            if (GetHistoryDistance(serverItem, localItem) > _reconcileDistance) {
-                // TODO: New event for OnStartServerReconciliation
-                pTransform.position = new Vector3(serverItem.xPosition, serverItem.yPosition, serverItem.zPosition);
-                var itemsToReplay = _localInputHistory.Where(x => x.frame >= serverItem.frame);
-                foreach (var inputItemToReconcile in itemsToReplay) {
-                    RaiseReconcileMovement(_speed, inputItemToReconcile.inputFrame);
-                    if (inputItemToReconcile.inputFrame.HasActions) {
-                        RaiseReconcileAction(inputItemToReconcile.inputFrame);
-                    }
-                }
-
-                //TODO: Dont we have to remove the reconciliated frames as well?
-                _localInputHistory.RemoveAt(localItemIndex);
+            float distance = GetHistoryDistance(serverItem, localItem);
+            if (distance > _reconcileDistance) {
+                var itemsToReconcile = _localInputHistory.Where(x => x.frame >= serverItem.frame);
+                RaiseReconcileFrames(distance, localItem, serverItem, itemsToReconcile);
+                _localInputHistory.RemoveAt(localItemIndex);//TODO remove localInputHistoryItems (how many + how far, all input before that?)
             }
 
             _authorativeInputHistory.RemoveAt(0);
@@ -195,21 +185,15 @@ public class InputListener {
         }
     }
 
-    public void RaiseReconcileMovement (float pSpeed, InputFrame pCurrentFrame) {
-        if (OnReconcileMovement != null) {
-            OnReconcileMovement(pSpeed, pCurrentFrame);
-        }
-    }
-
     public void RaisePerformAction (InputFrame pFrame) {
         if (OnPerformAction != null) {
             OnPerformAction(pFrame);
         }
     }
 
-    public void RaiseReconcileAction (InputFrame pCurrentFrame) {
-        if (OnReconcileAction != null) {
-            OnReconcileAction(pCurrentFrame);
+    public void RaiseReconcileFrames (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile) {
+        if (OnReconcileFrames != null) {
+            OnReconcileFrames(pDistance, pLocalItem, pServerItem, pItemsToReconcile);
         }
     }
 
