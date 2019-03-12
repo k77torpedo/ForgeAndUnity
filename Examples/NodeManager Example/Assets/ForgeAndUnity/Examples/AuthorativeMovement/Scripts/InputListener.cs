@@ -41,7 +41,6 @@ public class InputListener {
     public event ReconcileFramesEvent OnReconcileFrames;
 
 
-
     //Functions
     public InputListener () {
         _nextActions = new List<byte>();

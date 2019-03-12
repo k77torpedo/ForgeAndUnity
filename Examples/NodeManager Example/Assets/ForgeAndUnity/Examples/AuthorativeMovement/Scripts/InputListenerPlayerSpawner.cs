@@ -34,7 +34,7 @@ public class InputListenerPlayerSpawner : MonoBehaviour {
                 return;
             }
 
-            playerBehavior.networkObject.AssignOwnership(pPlayer);
+            playerBehavior.networkObject.ownerId = pPlayer.NetworkId;
         });
     }
 

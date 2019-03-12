@@ -13,6 +13,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     public InputListener _listener;
     public Rigidbody _body;
 
+    bool _isOwner;
     bool _isJumping;
 
 
@@ -26,13 +27,20 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         _listener.OnReconcileFrames += ReconcileFrames;
     }
 
+    protected override void NetworkStart () {
+        base.NetworkStart();
+        if (!networkObject.IsServer) {
+            networkObject.ownerIdChanged += NetworkObject_ownerIdChanged;
+        }
+    }
+
     void FixedUpdate () {
         if (networkObject == null) {
             return;
         }
 
         // Everyone that is not the server or the controlling player will just set the position.
-        if (!networkObject.IsServer && !networkObject.IsOwner) {
+        if (!networkObject.IsServer && !_isOwner) {
             _body.position = networkObject.position;
             return;
         }
@@ -41,28 +49,28 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         _listener.AdvanceFrame();
 
         // The controlling player saves this Frame with his last input and action recorded.//(_listener.CurrentInputFrame.HasMovement || _listener.CurrentInputFrame.HasActions)
-        if (networkObject.IsOwner) {
+        if (_isOwner) {
             _listener.SaveFrame();
         }
 
         // The server and the controlling player play the frames they saved.
-        if (networkObject.IsServer || networkObject.IsOwner) {
+        if (networkObject.IsServer || _isOwner) {
             _listener.PlayFrame(transform);
         }
 
         // Reconcile frames when the client is too far away from the server-position.
-        if (networkObject.IsOwner) {
+        if (_isOwner) {
             _listener.ReconcileFrames();
         }
 
         // The server sets the position on the network for everybody else.
         if (networkObject.IsServer) {
-            networkObject.position = _body.position;
+            networkObject.position = transform.position;
         }
     }
 
     void Update () {
-        if (networkObject == null || networkObject.IsServer || !networkObject.IsOwner) {
+        if (networkObject == null || networkObject.IsServer || !_isOwner) {
             return;
         }
 
@@ -88,8 +96,8 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
 
     #region Events
     void SyncFrame () {
-        // The player sends the Frames he played to the server
-        if (networkObject.IsOwner) {
+        // The player sends the frames he played to the server.
+        if (_isOwner) {
             networkObject.SendRpc(RPC_SYNC_INPUTS, Receivers.Server, _listener.DequeueFramesToSend());
         }
 
@@ -125,7 +133,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     void ReconcileFrames (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile) {
         // Here we provide an implementation for the reconciling and replaying frames if anything went wrong.
 
-        // We set our current position to the servers-position and simply replay everything and then we should end up where the server is.
+        // We set our current position to the servers-position and simply replay every input we made and then we should end up where the server is.
         transform.position = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
         foreach (var item in pItemsToReconcile) {
             PerformMovement(_listener.Speed, item.inputFrame);
@@ -133,6 +141,11 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
                 PerformAction(item.inputFrame);
             }
         }
+    }
+
+    void NetworkObject_ownerIdChanged (uint pField, ulong pTimestamp) {
+        networkObject.ownerIdChanged -= NetworkObject_ownerIdChanged;
+        _isOwner = (NetworkManager.Instance.Networker.Me.NetworkId == pField);
     }
 
     #endregion
