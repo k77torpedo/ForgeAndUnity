@@ -13,6 +13,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     public InputListener _listener;
     public Rigidbody _body;
 
+    NetworkingPlayer _owningPlayer;
     bool _isOwner;
     bool _isJumping;
 
@@ -29,7 +30,9 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
 
     protected override void NetworkStart () {
         base.NetworkStart();
-        if (!networkObject.IsServer) {
+        if (networkObject.IsServer) {
+            _owningPlayer = NetworkManager.Instance.Networker.GetPlayerById(networkObject.ownerId);
+        } else {
             networkObject.ownerIdChanged += NetworkObject_ownerIdChanged;
         }
     }
@@ -41,7 +44,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
 
         // Everyone that is not the server or the controlling player will just set the position.
         if (!networkObject.IsServer && !_isOwner) {
-            _body.position = networkObject.position;
+            transform.position = networkObject.position;
             return;
         }
 
@@ -103,17 +106,13 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
 
         // The server sends back what he played to the controlling player.
         if (networkObject.IsServer) {
-            networkObject.SendRpcUnreliable(networkObject.Owner, RPC_SYNC_INPUT_HISTORY, _listener.DequeueLocalInputHistory());
+            networkObject.SendRpcUnreliable(_owningPlayer, RPC_SYNC_INPUT_HISTORY, _listener.DequeueLocalInputHistory());
         }
     }
 
     void PerformMovement (float pSpeed, InputFrame pInputFrame) {
         // Here we provide an implementation on how we want our GameObject to move on input (server and client).
-        Vector3 translation = Vector3.ClampMagnitude(new Vector3(pInputFrame.horizontalMovement, 0f, pInputFrame.verticalMovement) * pSpeed * Time.fixedDeltaTime, pSpeed);
-        _body.position += translation;
-        if (!_isJumping) {
-            _body.velocity = translation;
-        }
+        transform.position += Vector3.ClampMagnitude(new Vector3(pInputFrame.horizontalMovement, 0f, pInputFrame.verticalMovement) * pSpeed * Time.fixedDeltaTime, pSpeed);
     }
 
     void PerformAction (InputFrame pInputFrame) {
@@ -156,7 +155,16 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     }
 
     public override void SyncInputHistory (RpcArgs pArgs) {
-        _listener.AddAuthoritativeInputHistory(pArgs.GetNext<byte[]>().ByteArrayToObject<List<InputFrameHistoryItem>>());
+        List<InputFrameHistoryItem> serverItems = pArgs.GetNext<byte[]>().ByteArrayToObject<List<InputFrameHistoryItem>>();
+
+        // The serverItems are being sent unreliably and can arrive out of order. We check if the serverItems have arrived too late.
+        if (serverItems.Count > 0
+            && _listener.AuthorativeInputHistory.Count > 0
+            && serverItems[serverItems.Count - 1].frame <= _listener.AuthorativeInputHistory[_listener.AuthorativeInputHistory.Count - 1].frame) {
+            return;
+        }
+
+        _listener.AddAuthoritativeInputHistory(serverItems);
     }
 
     #endregion
