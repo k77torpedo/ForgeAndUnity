@@ -77,12 +77,12 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
             return;
         }
 
-        // We record the players movement based on his input.
+        // We record the players directional input.
         _listener.RecordMovement(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         // Record any action the player might take!
         if (Input.GetKeyDown(KeyCode.Space)) {
-            _listener.RecordAction(1); // 1 = Jump;
+            _listener.RecordAction(1, 0); // 1 = Jump;
         }
 
         // Press 'X' during simulation to test Server-Reconciliation!
@@ -92,20 +92,21 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     }
 
     void OnCollisionEnter (Collision pCollision) {
+        _body.useGravity = true;
         _isJumping = false;
     }
 
     #endregion
 
-    #region Events
+    #region InputListener-Events
     void SyncFrame () {
         // The player sends the frames he played to the server.
-        if (_isOwner) {
+        if (_isOwner && _listener.FramesToSend.Count > 0) {
             networkObject.SendRpc(RPC_SYNC_INPUTS, Receivers.Server, _listener.DequeueFramesToSend());
         }
 
         // The server sends back what he played to the controlling player.
-        if (networkObject.IsServer) {
+        if (networkObject.IsServer && _listener.LocalInputHistory.Count > 0) {
             networkObject.SendRpcUnreliable(_owningPlayer, RPC_SYNC_INPUT_HISTORY, _listener.DequeueLocalInputHistory());
         }
     }
@@ -118,10 +119,26 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     void PerformAction (InputFrame pInputFrame) {
         // Here we provide an implementation for the actions we recorded (server and client).
         for (int i = 0; i < pInputFrame.actions.Length; i++) {
-            switch (pInputFrame.actions[i]) {
+            switch (pInputFrame.actions[i].actionId) {
                 case 1:
-                    _body.AddForce(Vector3.up * 10f, ForceMode.Impulse);
-                    _isJumping = true;
+                    byte step = pInputFrame.actions[i].data[0];
+                    if (step == 0) {
+                        _body.useGravity = false;
+                        _isJumping = true;
+                    }
+
+                    if (step < 150 && _isJumping) {
+                        _listener.RecordAction(1, ++step);
+                        if (step < 50) {
+                            transform.position += Vector3.up * -Physics.gravity.y * Time.fixedDeltaTime;
+                        } else {
+                            transform.position += Vector3.up * Physics.gravity.y * Time.fixedDeltaTime;
+                        }
+                    } else {
+                        _body.useGravity = true;
+                        _isJumping = false;
+                    }
+                    
                     break;
                 default:
                     break;
@@ -142,6 +159,9 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         }
     }
 
+    #endregion
+
+    #region Events
     void NetworkObject_ownerIdChanged (uint pField, ulong pTimestamp) {
         networkObject.ownerIdChanged -= NetworkObject_ownerIdChanged;
         _isOwner = (NetworkManager.Instance.Networker.Me.NetworkId == pField);

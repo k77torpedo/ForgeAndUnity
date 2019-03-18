@@ -11,9 +11,8 @@ public class InputListener {
     [SerializeField] protected int _frameSyncRate;
     [SerializeField] protected float _reconcileDistance;
     protected uint _currentFrame;
-    protected InputFrame _lastInputFrame;
     protected InputFrame _currentInputFrame;
-    protected List<byte> _nextActions;
+    protected Dictionary<byte, ActionFrame> _nextActions;
     protected List<InputFrame> _framesToPlay;
     protected List<InputFrame> _framesToSend;
     protected List<InputFrameHistoryItem> _localInputHistory;
@@ -23,7 +22,6 @@ public class InputListener {
     public uint CurrentFrame { get { return _currentFrame; } set { _currentFrame = value; } }
     public int FrameSyncRate { get { return _frameSyncRate; } set { _frameSyncRate = value; } }
     public float ReconcileDistance { get { return _reconcileDistance; } set { _reconcileDistance = value; } }
-    public InputFrame LastInputFrame { get { return _lastInputFrame; } }
     public InputFrame CurrentInputFrame { get { return _currentInputFrame; } }
     public List<InputFrame> FramesToPlay { get { return _framesToPlay; } }
     public List<InputFrame> FramesToSend { get { return _framesToSend; } }
@@ -43,7 +41,7 @@ public class InputListener {
 
     //Functions
     public InputListener () {
-        _nextActions = new List<byte>();
+        _nextActions = new Dictionary<byte, ActionFrame>();
         _framesToPlay = new List<InputFrame>();
         _framesToSend = new List<InputFrame>();
         _localInputHistory = new List<InputFrameHistoryItem>();
@@ -60,8 +58,19 @@ public class InputListener {
         _currentInputFrame.verticalMovement = pVerticalInput;
     }
 
-    public void RecordAction (byte pActionId) {
-        _nextActions.Add(pActionId);
+    public void RecordAction(byte pActionId, byte pData) {
+        RecordAction(pActionId, new byte[] { pData });
+    }
+
+    public void RecordAction(byte pActionId, object pData) {
+        RecordAction(pActionId, pData.ObjectToByteArray());
+    }
+
+    public void RecordAction(byte pActionId, byte[] pData = null) {
+        _nextActions[pActionId] = new ActionFrame() {
+            actionId = pActionId,
+            data = pData
+        };
     }
 
     public void AdvanceFrame () {
@@ -71,13 +80,12 @@ public class InputListener {
 
     public void SaveFrame () {
         if (_nextActions.Count > 0) {
-            _currentInputFrame.actions = _nextActions.ToArray();
+            _currentInputFrame.actions = _nextActions.Values.ToArray();
             _nextActions.Clear();
         }
 
         _framesToPlay.Add(_currentInputFrame);
         _framesToSend.Add(_currentInputFrame);
-        _lastInputFrame = _currentInputFrame;
         _currentInputFrame.actions = null;
     }
 

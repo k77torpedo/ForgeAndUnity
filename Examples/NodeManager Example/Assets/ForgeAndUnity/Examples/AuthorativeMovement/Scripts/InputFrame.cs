@@ -5,7 +5,7 @@
 public struct InputFrame {
     //Fields
     public uint frame;
-    public byte[] actions;
+    public ActionFrame[] actions;
     public float horizontalMovement;
     public float verticalMovement;
 
