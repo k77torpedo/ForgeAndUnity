@@ -108,6 +108,7 @@
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\Server Browser\ServerBrowser.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\Server Browser\ServerBrowserItem.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\UnityObjectMapper.cs" />
+    <Compile Include="Assets\ForgeAndUnity\Examples\AuthorativeMovement\Scripts\ActionFrame.cs" />
     <Compile Include="Assets\ForgeAndUnity\Examples\AuthorativeMovement\Scripts\InputFrame.cs" />
     <Compile Include="Assets\ForgeAndUnity\Examples\AuthorativeMovement\Scripts\InputFrameHistoryItem.cs" />
     <Compile Include="Assets\ForgeAndUnity\Examples\AuthorativeMovement\Scripts\InputListener.cs" />

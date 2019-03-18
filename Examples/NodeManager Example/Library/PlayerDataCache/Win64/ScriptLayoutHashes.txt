@@ -91,7 +91,7 @@ fc108ce7d98c40ac0907e8ca7f500c76 UnityEngine.UI.dll:UnityEngine.UI.Text
 0fd6822f6177297bd0eb4d83cc7a9030 UnityEngine.UI.dll:UnityEngine.UI.ToggleGroup
 abf1930d8126d0b2e00e9449129a0190 UnityEngine.UI.dll:UnityEngine.EventSystems.TouchInputModule
 64e54c0cbb0177c5ea26f340efb9ff85 UnityEngine.UI.dll:UnityEngine.UI.VerticalLayoutGroup
-0745e4e16c4c5d995f8f1fffd571b3bb Assembly-CSharp.dll:BeardedManStudios.Forge.Networking.Unity.NetworkManager
+a2350c69c3cb646f877cccf47369f61a Assembly-CSharp.dll:BeardedManStudios.Forge.Networking.Unity.NetworkManager
 71bb6a6b6c8f052f948db64c7dd3ca4f UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 06f0fef534ca4c1d6064fd77a26bf722 UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
 780e8f682b3221346c034a6712a0fd25 UnityEngine.Timeline.dll:UnityEngine.Timeline.AnimationPlayableAsset
@@ -127,7 +127,7 @@ b1840d9703fbc95a9d702d967bfcccfe Assembly-CSharp.dll:BeardedManStudios.Forge.Net
 0e1479d4781fcef3d57003e87ac77a34 Assembly-CSharp.dll:.InputListenerPlayer
 038dde89ef9ba19e9c1c22440f467387 Assembly-CSharp.dll:BeardedManStudios.Forge.Networking.Unity.Lobby.LobbyPlayerItem
 94017dcc9f00fe671ea7dc427b4da011 Unity.TextMeshPro.dll:TMPro.TMP_SpriteAsset
-0745e4e16c4c5d995f8f1fffd571b3bb Assembly-CSharp.dll:BeardedManStudios.Forge.Networking.Unity.NetworkManager
+a2350c69c3cb646f877cccf47369f61a Assembly-CSharp.dll:BeardedManStudios.Forge.Networking.Unity.NetworkManager
 a736ffa9d4bac7b74116dd892403503c Assembly-CSharp.dll:.ChatManager
 b3ab2106268377ffe25dd18ac23dca28 Unity.TextMeshPro.dll:TMPro.TMP_Asset
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.TokenPlayer
