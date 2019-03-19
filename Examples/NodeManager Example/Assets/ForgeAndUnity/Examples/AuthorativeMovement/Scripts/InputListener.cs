@@ -31,10 +31,8 @@ public class InputListener {
     //Events
     public delegate void SyncFrameEvent ();
     public event SyncFrameEvent OnSyncFrame;
-    public delegate void PerformMovementEvent (float pSpeed, InputFrame pFrame);
-    public event PerformMovementEvent OnPerformMovement;
-    public delegate void PerformActionEvent (InputFrame pFrame);
-    public event PerformActionEvent OnPerformAction;
+    public delegate void PlayFrameEvent (float pSpeed, InputFrame pFrame);
+    public event PlayFrameEvent OnPlayFrame;
     public delegate void ReconcileFramesEvent (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile);
     public event ReconcileFramesEvent OnReconcileFrames;
 
@@ -95,11 +93,7 @@ public class InputListener {
         }
 
         InputFrame frame = _framesToPlay[0];
-        RaisePerformMovement(_speed, frame);
-        if (frame.actions != null) {
-            RaisePerformAction(frame);
-        }
-
+        RaisePlayFrame(_speed, frame);
         _localInputHistory.Add(GetMovementHistoryItem(frame, pTransform.position.x, pTransform.position.y, pTransform.position.z));
         _framesToPlay.RemoveAt(0);
         if (_currentFrame % _frameSyncRate == 0) {
@@ -186,15 +180,9 @@ public class InputListener {
         }
     }
 
-    public void RaisePerformMovement (float pSpeed, InputFrame pFrame) {
-        if (OnPerformMovement != null) {
-            OnPerformMovement(pSpeed, pFrame);
-        }
-    }
-
-    public void RaisePerformAction (InputFrame pFrame) {
-        if (OnPerformAction != null) {
-            OnPerformAction(pFrame);
+    public void RaisePlayFrame (float pSpeed, InputFrame pFrame) {
+        if (OnPlayFrame != null) {
+            OnPlayFrame(pSpeed, pFrame);
         }
     }
 

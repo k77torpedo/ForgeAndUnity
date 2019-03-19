@@ -16,6 +16,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     NetworkingPlayer _owningPlayer;
     bool _isOwner;
     bool _isJumping;
+    Vector3 _errorMargin;
 
 
     //Functions
@@ -23,8 +24,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     void Awake () {
         // We subscribe to the InputListener so we can use custom logic on how we actually want to move our GameObject or perform actions like jumping.
         _listener.OnSyncFrame += SyncFrame;
-        _listener.OnPerformMovement += PerformMovement;
-        _listener.OnPerformAction += PerformAction;
+        _listener.OnPlayFrame += PlayFrame;
         _listener.OnReconcileFrames += ReconcileFrames;
     }
 
@@ -64,6 +64,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         // Reconcile frames when the client is too far away from the server-position.
         if (_isOwner) {
             _listener.ReconcileFrames();
+            CorrectError();
         }
 
         // The server sets the position on the network for everybody else.
@@ -111,34 +112,18 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         }
     }
 
-    void PerformMovement (float pSpeed, InputFrame pInputFrame) {
-        // Here we provide an implementation on how we want our GameObject to move on input (server and client).
-        transform.position += Vector3.ClampMagnitude(new Vector3(pInputFrame.horizontalMovement, 0f, pInputFrame.verticalMovement) * pSpeed * Time.fixedDeltaTime, pSpeed);
-    }
+    void PlayFrame (float pSpeed, InputFrame pInputFrame) {
+        // Here we provide an implementation on how we want our GameObject to move on input.
+        transform.position += MoveDelta(pSpeed, pInputFrame);
+        if (!pInputFrame.HasActions) {
+            return;
+        }
 
-    void PerformAction (InputFrame pInputFrame) {
-        // Here we provide an implementation for the actions we recorded (server and client).
+        // Here we provide an implementation for the actions we recorded.
         for (int i = 0; i < pInputFrame.actions.Length; i++) {
             switch (pInputFrame.actions[i].actionId) {
                 case 1:
-                    byte step = pInputFrame.actions[i].data[0];
-                    if (step == 0) {
-                        _body.useGravity = false;
-                        _isJumping = true;
-                    }
-
-                    if (step < 150 && _isJumping) {
-                        _listener.RecordAction(1, ++step);
-                        if (step < 50) {
-                            transform.position += Vector3.up * -Physics.gravity.y * Time.fixedDeltaTime;
-                        } else {
-                            transform.position += Vector3.up * Physics.gravity.y * Time.fixedDeltaTime;
-                        }
-                    } else {
-                        _body.useGravity = true;
-                        _isJumping = false;
-                    }
-                    
+                    transform.position += JumpDelta(pInputFrame.actions[i]);
                     break;
                 default:
                     break;
@@ -150,13 +135,65 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         // Here we provide an implementation for the reconciling and replaying frames if anything went wrong.
 
         // We set our current position to the servers-position and simply replay every input we made and then we should end up where the server is.
-        transform.position = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
+        //transform.position = = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
+        Vector3 serverPosition = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
         foreach (var item in pItemsToReconcile) {
-            PerformMovement(_listener.Speed, item.inputFrame);
-            if (item.inputFrame.HasActions) {
-                PerformAction(item.inputFrame);
+            serverPosition += MoveDelta(_listener.Speed, item.inputFrame);
+            if (!item.inputFrame.HasActions) {
+                continue;
             }
+
+            for (int i = 0; i < item.inputFrame.actions.Length; i++) {
+                switch (item.inputFrame.actions[i].actionId) {
+                    case 1:
+                        serverPosition += JumpDelta(item.inputFrame.actions[i]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            //PerformMovement(_listener.Speed, item.inputFrame);
+            //if (item.inputFrame.HasActions) {
+            //    PerformAction(item.inputFrame);
+            //}
         }
+
+        _errorMargin = serverPosition - transform.position;
+    }
+
+    void CorrectError () {
+        if (_errorMargin.sqrMagnitude > 0.006f) {
+            Vector3 lerp = Vector3.Lerp(Vector3.zero, _errorMargin, 0.15f);
+            _errorMargin -= lerp;
+            transform.position += lerp;
+        }
+    }
+
+    Vector3 MoveDelta (float pSpeed, InputFrame pInputFrame) {
+        return Vector3.ClampMagnitude(new Vector3(pInputFrame.horizontalMovement, 0f, pInputFrame.verticalMovement) * pSpeed * Time.fixedDeltaTime, pSpeed);
+    }
+
+    Vector3 JumpDelta (ActionFrame pActionFrame) {
+        byte step = pActionFrame.data[0];
+        if (step == 0) {
+            _body.useGravity = false;
+            _isJumping = true;
+        }
+
+        if (step < 150 && _isJumping) {
+            _listener.RecordAction(1, ++step);
+            if (step < 50) {
+                return Vector3.up * -Physics.gravity.y * Time.fixedDeltaTime;
+            } else {
+                return Vector3.up * Physics.gravity.y * Time.fixedDeltaTime;
+            }
+        } else {
+            _body.useGravity = true;
+            _isJumping = false;
+        }
+
+        return Vector3.zero;
     }
 
     #endregion
