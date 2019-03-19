@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using BeardedManStudios.Forge.Networking.Unity;
 using BeardedManStudios.Forge.Networking.Generated;
@@ -7,7 +6,6 @@ using BeardedManStudios.Forge.Networking;
 using ForgeAndUnity.Forge;
 
 
-// TODO: USE FIELDS INSTEAD OF RPC
 public class InputListenerPlayer : InputListenerPlayerBehavior {
     //Fields
     public InputListener _listener;
@@ -51,7 +49,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         // We advance one frame in the simulation
         _listener.AdvanceFrame();
 
-        // The controlling player saves this Frame with his last input and action recorded.//(_listener.CurrentInputFrame.HasMovement || _listener.CurrentInputFrame.HasActions)
+        // The controlling player saves this Frame with his last input and action recorded.
         if (_isOwner) {
             _listener.SaveFrame();
         }

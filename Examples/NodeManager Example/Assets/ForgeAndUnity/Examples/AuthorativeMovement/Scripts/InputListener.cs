@@ -4,29 +4,32 @@ using System.Linq;
 using UnityEngine;
 using ForgeAndUnity.Forge;
 
+/// <summary>
+/// Allows for the recording, saving and syncing of input with authorative reconciliation.
+/// </summary>
 [System.Serializable]
 public class InputListener {
     //Fields
-    [SerializeField] protected float _speed;
-    [SerializeField] protected int _frameSyncRate;
-    [SerializeField] protected float _reconcileDistance;
-    protected uint _currentFrame;
-    protected InputFrame _currentInputFrame;
-    protected Dictionary<byte, ActionFrame> _nextActions;
-    protected List<InputFrame> _framesToPlay;
-    protected List<InputFrame> _framesToSend;
-    protected List<InputFrameHistoryItem> _localInputHistory;
-    protected List<InputFrameHistoryItem> _authorativeInputHistory;
+    [SerializeField] protected float                    _speed;
+    [SerializeField] protected int                      _frameSyncRate;
+    [SerializeField] protected float                    _reconcileDistance;
+    protected uint                                      _currentFrame;
+    protected InputFrame                                _currentInputFrame;
+    protected Dictionary<byte, ActionFrame>             _nextActions;
+    protected List<InputFrame>                          _framesToPlay;
+    protected List<InputFrame>                          _framesToSend;
+    protected List<InputFrameHistoryItem>               _localInputHistory;
+    protected List<InputFrameHistoryItem>               _authorativeInputHistory;
 
-    public float Speed { get { return _speed; } set { _speed = value; } }
-    public uint CurrentFrame { get { return _currentFrame; } set { _currentFrame = value; } }
-    public int FrameSyncRate { get { return _frameSyncRate; } set { _frameSyncRate = value; } }
-    public float ReconcileDistance { get { return _reconcileDistance; } set { _reconcileDistance = value; } }
-    public InputFrame CurrentInputFrame { get { return _currentInputFrame; } }
-    public List<InputFrame> FramesToPlay { get { return _framesToPlay; } }
-    public List<InputFrame> FramesToSend { get { return _framesToSend; } }
-    public List<InputFrameHistoryItem> LocalInputHistory { get { return _localInputHistory; } }
-    public List<InputFrameHistoryItem> AuthorativeInputHistory { get { return _authorativeInputHistory; } }
+    public float                                        Speed                               { get { return _speed; } set { _speed = value; } }
+    public uint                                         CurrentFrame                        { get { return _currentFrame; } set { _currentFrame = value; } }
+    public int                                          FrameSyncRate                       { get { return _frameSyncRate; } set { _frameSyncRate = value; } }
+    public float                                        ReconcileDistance                   { get { return _reconcileDistance; } set { _reconcileDistance = value; } }
+    public InputFrame                                   CurrentInputFrame                   { get { return _currentInputFrame; } }
+    public List<InputFrame>                             FramesToPlay                        { get { return _framesToPlay; } }
+    public List<InputFrame>                             FramesToSend                        { get { return _framesToSend; } }
+    public List<InputFrameHistoryItem>                  LocalInputHistory                   { get { return _localInputHistory; } }
+    public List<InputFrameHistoryItem>                  AuthorativeInputHistory             { get { return _authorativeInputHistory; } }
 
     //Events
     public delegate void SyncFrameEvent ();
@@ -51,32 +54,32 @@ public class InputListener {
         _frameSyncRate = pFrameSyncRate;
     }
 
-    public void RecordMovement (float pHorizontalInput, float pVerticalInput) {
-        _currentInputFrame.horizontalMovement = pHorizontalInput;
-        _currentInputFrame.verticalMovement = pVerticalInput;
+    public virtual void RecordMovement (float pHorizontalMovement, float pVerticalMovement) {
+        _currentInputFrame.horizontalMovement = pHorizontalMovement;
+        _currentInputFrame.verticalMovement = pVerticalMovement;
     }
 
-    public void RecordAction(byte pActionId, byte pData) {
+    public virtual void RecordAction(byte pActionId, byte pData) {
         RecordAction(pActionId, new byte[] { pData });
     }
 
-    public void RecordAction(byte pActionId, object pData) {
+    public virtual void RecordAction(byte pActionId, object pData) {
         RecordAction(pActionId, pData.ObjectToByteArray());
     }
 
-    public void RecordAction(byte pActionId, byte[] pData = null) {
+    public virtual void RecordAction(byte pActionId, byte[] pData = null) {
         _nextActions[pActionId] = new ActionFrame() {
             actionId = pActionId,
             data = pData
         };
     }
 
-    public void AdvanceFrame () {
+    public virtual void AdvanceFrame () {
         _currentFrame++;
         _currentInputFrame.frame = _currentFrame;
     }
 
-    public void SaveFrame () {
+    public virtual void SaveFrame () {
         if (_nextActions.Count > 0) {
             _currentInputFrame.actions = _nextActions.Values.ToArray();
             _nextActions.Clear();
@@ -87,7 +90,7 @@ public class InputListener {
         _currentInputFrame.actions = null;
     }
 
-    public void PlayFrame (Transform pTransform) {
+    public virtual void PlayFrame (Transform pTransform) {
         if (_framesToPlay.Count == 0) {
             return;
         }
@@ -101,7 +104,7 @@ public class InputListener {
         }
     }
 
-    public void ReconcileFrames () {
+    public virtual void ReconcileFrames () {
         while (_authorativeInputHistory.Count > 0) {
             InputFrameHistoryItem serverItem = _authorativeInputHistory[0];
             int localItemIndex;
@@ -122,46 +125,45 @@ public class InputListener {
         }
     }
 
-    public byte[] DequeueFramesToSend () {
+    public virtual byte[] DequeueFramesToSend () {
         byte[] data = _framesToSend.ObjectToByteArray();
         _framesToSend.Clear();
         return data;
     }
 
-    public byte[] DequeueLocalInputHistory () {
+    public virtual byte[] DequeueLocalInputHistory () {
         byte[] data = _localInputHistory.ObjectToByteArray();
         _localInputHistory.Clear();
         return data;
     }
 
-    public void AddFramesToPlay (List<InputFrame> pFrames) {
+    public virtual void AddFramesToPlay (List<InputFrame> pFrames) {
         _framesToPlay.AddRange(pFrames);
     }
 
-    public void AddAuthoritativeInputHistory (List<InputFrameHistoryItem> pHistory) {
+    public virtual void AddAuthoritativeInputHistory (List<InputFrameHistoryItem> pHistory) {
         _authorativeInputHistory.AddRange(pHistory);
     }
 
-    float GetHistoryDistance (InputFrameHistoryItem pServerItem, InputFrameHistoryItem pLocalItem) {
-        var serverPosition = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
-        var localPosition = new Vector3(pLocalItem.xPosition, pLocalItem.yPosition, pLocalItem.zPosition);
-        return Vector3.Distance(localPosition, serverPosition);
+    public virtual float GetHistoryDistance (InputFrameHistoryItem pServerItem, InputFrameHistoryItem pLocalItem) {
+        return Vector3.Distance(
+            new Vector3(pLocalItem.xPosition, pLocalItem.yPosition, pLocalItem.zPosition),
+            new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition)
+        );
     }
 
-    InputFrameHistoryItem GetMovementHistoryItem (InputFrame pFrame, float pXPosition, float pYPosition, float pZPosition) {
-        InputFrameHistoryItem movementHistoryItem = new InputFrameHistoryItem() {
+    public virtual InputFrameHistoryItem GetMovementHistoryItem (InputFrame pFrame, float pXPosition, float pYPosition, float pZPosition) {
+        return new InputFrameHistoryItem() {
             xPosition = pXPosition,
             yPosition = pYPosition,
             zPosition = pZPosition,
             frame = pFrame.frame,
             inputFrame = pFrame
         };
-
-        return movementHistoryItem;
     }
 
 
-    public InputFrameHistoryItem TryGetMatchingLocalInputHistory (uint pAuthorativeFrame, out int pIndex) {
+    public virtual InputFrameHistoryItem TryGetMatchingLocalInputHistory (uint pAuthorativeFrame, out int pIndex) {
         for (int i = 0; i < _localInputHistory.Count; i++) {
             if (_localInputHistory[i].frame == pAuthorativeFrame) {
                 pIndex = i;
@@ -173,25 +175,22 @@ public class InputListener {
         return default(InputFrameHistoryItem);
     }
 
-    #region Events
-    public void RaiseSyncFrame () {
+    public virtual void RaiseSyncFrame () {
         if (OnSyncFrame != null) {
             OnSyncFrame();
         }
     }
 
-    public void RaisePlayFrame (float pSpeed, InputFrame pFrame) {
+    public virtual void RaisePlayFrame (float pSpeed, InputFrame pFrame) {
         if (OnPlayFrame != null) {
             OnPlayFrame(pSpeed, pFrame);
         }
     }
 
-    public void RaiseReconcileFrames (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile) {
+    public virtual void RaiseReconcileFrames (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile) {
         if (OnReconcileFrames != null) {
             OnReconcileFrames(pDistance, pLocalItem, pServerItem, pItemsToReconcile);
         }
     }
-
-    #endregion
 }
 
