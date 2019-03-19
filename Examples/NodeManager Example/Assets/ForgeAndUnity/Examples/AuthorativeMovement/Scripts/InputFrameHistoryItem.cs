@@ -4,7 +4,7 @@
 [System.Serializable]
 public struct InputFrameHistoryItem {
     //Fields
-    public uint frame;
+    //public uint frame;
     public float xPosition;
     public float yPosition;
     public float zPosition;

@@ -109,25 +109,25 @@ public class InputListener {
         ClearLocalInputHistory(_authorativeFrame);
         while (_authorativeInputHistory.Count > 0) {
             InputFrameHistoryItem serverItem = _authorativeInputHistory.Dequeue();
-            InputFrameHistoryItem localItem = FindLocalInputHistoryItemOrDefault(serverItem.frame);
-            if (localItem.frame == 0) {
+            InputFrameHistoryItem localItem = FindLocalInputHistoryItemOrDefault(serverItem.inputFrame.frame);
+            if (localItem.inputFrame.frame == 0) {
                 continue;
             }
 
             float distance = GetHistoryDistance(serverItem, localItem);
             if (distance > _reconcileDistance) {
-                var itemsToReconcile = _localInputHistory.Where(x => x.frame >= serverItem.frame);
+                var itemsToReconcile = _localInputHistory.Where(x => x.inputFrame.frame >= serverItem.inputFrame.frame);
                 RaiseReconcileFrames(distance, localItem, serverItem, itemsToReconcile);
             }
 
-            _authorativeFrame = serverItem.frame;
+            _authorativeFrame = serverItem.inputFrame.frame;
         }
     }
 
     public virtual void ClearLocalInputHistory (uint pUntilFrame) {
         int count = 0;
         for (int i = 0; i < _localInputHistory.Count; i++) {
-            if (_localInputHistory[i].frame <= pUntilFrame) {
+            if (_localInputHistory[i].inputFrame.frame <= pUntilFrame) {
                 count++;
             } else {
                 break;
@@ -173,14 +173,13 @@ public class InputListener {
             xPosition = pXPosition,
             yPosition = pYPosition,
             zPosition = pZPosition,
-            frame = pFrame.frame,
             inputFrame = pFrame
         };
     }
 
     public virtual InputFrameHistoryItem FindLocalInputHistoryItemOrDefault (uint pAuthorativeFrame) {
         for (int i = 0; i < _localInputHistory.Count; i++) {
-            if (_localInputHistory[i].frame == pAuthorativeFrame) {
+            if (_localInputHistory[i].inputFrame.frame == pAuthorativeFrame) {
                 return _localInputHistory[i];
             }
         }

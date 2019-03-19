@@ -209,7 +209,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         // The serverItems are being sent unreliably and can arrive out of order. We check if the serverItems have arrived too late.
         if (serverItems.Count > 0
             && _listener.AuthorativeInputHistory.Count > 0
-            && serverItems[serverItems.Count - 1].frame <= _listener.AuthorativeFrame) {
+            && serverItems[serverItems.Count - 1].inputFrame.frame <= _listener.AuthorativeFrame) {
             return;
         }
         
