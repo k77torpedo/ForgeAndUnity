@@ -20,7 +20,7 @@ public class InputListener {
     protected Queue<InputFrame>                         _framesToPlay;
     protected List<InputFrame>                          _framesToSend;
     protected List<InputFrameHistoryItem>               _localInputHistory;
-    protected List<InputFrameHistoryItem>               _authorativeInputHistory;
+    protected Queue<InputFrameHistoryItem>              _authorativeInputHistory;
 
     public float                                        Speed                               { get { return _speed; } set { _speed = value; } }
     public uint                                         CurrentFrame                        { get { return _currentFrame; } set { _currentFrame = value; } }
@@ -32,7 +32,7 @@ public class InputListener {
     public Queue<InputFrame>                            FramesToPlay                        { get { return _framesToPlay; } }
     public List<InputFrame>                             FramesToSend                        { get { return _framesToSend; } }
     public List<InputFrameHistoryItem>                  LocalInputHistory                   { get { return _localInputHistory; } }
-    public List<InputFrameHistoryItem>                  AuthorativeInputHistory             { get { return _authorativeInputHistory; } }
+    public Queue<InputFrameHistoryItem>                  AuthorativeInputHistory            { get { return _authorativeInputHistory; } }
 
     //Events
     public delegate void SyncFrameEvent ();
@@ -44,17 +44,16 @@ public class InputListener {
 
 
     //Functions
-    public InputListener () {
-        _currentActions = new Dictionary<byte, ActionFrame>();
-        _framesToPlay = new Queue<InputFrame>();
-        _framesToSend = new List<InputFrame>();
-        _localInputHistory = new List<InputFrameHistoryItem>();
-        _authorativeInputHistory = new List<InputFrameHistoryItem>();
-    }
+    public InputListener () : this(1f, 1, 64) { }
 
-    public InputListener (float pSpeed, int pFrameSyncRate) : this() {
+    public InputListener (float pSpeed, int pFrameSyncRate, int pCapacity) {
         _speed = pSpeed;
         _frameSyncRate = pFrameSyncRate;
+        _currentActions = new Dictionary<byte, ActionFrame>(pCapacity);
+        _framesToPlay = new Queue<InputFrame>(pCapacity);
+        _framesToSend = new List<InputFrame>(pCapacity);
+        _localInputHistory = new List<InputFrameHistoryItem>(pCapacity);
+        _authorativeInputHistory = new Queue<InputFrameHistoryItem>(pCapacity);
     }
 
     public virtual void RecordMovement (float pHorizontalMovement, float pVerticalMovement) {
@@ -109,12 +108,11 @@ public class InputListener {
     public virtual void ReconcileFrames () {
         ClearLocalInputHistory(_authorativeFrame);
         while (_authorativeInputHistory.Count > 0) {
-            InputFrameHistoryItem serverItem = _authorativeInputHistory[0];
-            //TODO: check for localItemIndex
+            InputFrameHistoryItem serverItem = _authorativeInputHistory.Dequeue();
+            //TODO: check for localItemIndex - we still need it?
             int localItemIndex;
             InputFrameHistoryItem localItem = TryGetMatchingLocalInputHistory(serverItem.frame, out localItemIndex);
             if (localItemIndex < 0) {
-                _authorativeInputHistory.RemoveAt(0);
                 continue;
             }
             
@@ -125,7 +123,6 @@ public class InputListener {
             }
 
             _authorativeFrame = serverItem.frame;
-            _authorativeInputHistory.RemoveAt(0);
         }
     }
 
@@ -161,7 +158,9 @@ public class InputListener {
     }
 
     public virtual void AddAuthoritativeInputHistory (List<InputFrameHistoryItem> pHistory) {
-        _authorativeInputHistory.AddRange(pHistory);
+        for (int i = 0; i < pHistory.Count; i++) {
+            _authorativeInputHistory.Enqueue(pHistory[i]);
+        }
     }
 
     public virtual float GetHistoryDistance (InputFrameHistoryItem pServerItem, InputFrameHistoryItem pLocalItem) {
