@@ -133,7 +133,6 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         // Here we provide an implementation for the reconciling and replaying frames if anything went wrong.
 
         // We set our current position to the servers-position and simply replay every input we made and then we should end up where the server is.
-        //transform.position = = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
         Vector3 serverPosition = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
         foreach (var item in pItemsToReconcile) {
             serverPosition += MoveDelta(_listener.Speed, item.inputFrame);
@@ -150,11 +149,6 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
                         break;
                 }
             }
-
-            //PerformMovement(_listener.Speed, item.inputFrame);
-            //if (item.inputFrame.HasActions) {
-            //    PerformAction(item.inputFrame);
-            //}
         }
 
         _errorMargin = serverPosition - transform.position;
@@ -215,10 +209,10 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         // The serverItems are being sent unreliably and can arrive out of order. We check if the serverItems have arrived too late.
         if (serverItems.Count > 0
             && _listener.AuthorativeInputHistory.Count > 0
-            && serverItems[serverItems.Count - 1].frame <= _listener.AuthorativeInputHistory[_listener.AuthorativeInputHistory.Count - 1].frame) {
+            && serverItems[serverItems.Count - 1].frame <= _listener.AuthorativeFrame) {
             return;
         }
-
+        
         _listener.AddAuthoritativeInputHistory(serverItems);
     }
 

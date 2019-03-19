@@ -14,19 +14,21 @@ public class InputListener {
     [SerializeField] protected int                      _frameSyncRate;
     [SerializeField] protected float                    _reconcileDistance;
     protected uint                                      _currentFrame;
+    protected uint                                      _authorativeFrame;
     protected InputFrame                                _currentInputFrame;
     protected Dictionary<byte, ActionFrame>             _nextActions;
-    protected List<InputFrame>                          _framesToPlay;
+    protected Queue<InputFrame>                         _framesToPlay;
     protected List<InputFrame>                          _framesToSend;
     protected List<InputFrameHistoryItem>               _localInputHistory;
     protected List<InputFrameHistoryItem>               _authorativeInputHistory;
 
     public float                                        Speed                               { get { return _speed; } set { _speed = value; } }
     public uint                                         CurrentFrame                        { get { return _currentFrame; } set { _currentFrame = value; } }
+    public uint                                         AuthorativeFrame                    { get { return _authorativeFrame; } set { _authorativeFrame = value; } }
     public int                                          FrameSyncRate                       { get { return _frameSyncRate; } set { _frameSyncRate = value; } }
     public float                                        ReconcileDistance                   { get { return _reconcileDistance; } set { _reconcileDistance = value; } }
     public InputFrame                                   CurrentInputFrame                   { get { return _currentInputFrame; } }
-    public List<InputFrame>                             FramesToPlay                        { get { return _framesToPlay; } }
+    public Queue<InputFrame>                            FramesToPlay                        { get { return _framesToPlay; } }
     public List<InputFrame>                             FramesToSend                        { get { return _framesToSend; } }
     public List<InputFrameHistoryItem>                  LocalInputHistory                   { get { return _localInputHistory; } }
     public List<InputFrameHistoryItem>                  AuthorativeInputHistory             { get { return _authorativeInputHistory; } }
@@ -43,7 +45,7 @@ public class InputListener {
     //Functions
     public InputListener () {
         _nextActions = new Dictionary<byte, ActionFrame>();
-        _framesToPlay = new List<InputFrame>();
+        _framesToPlay = new Queue<InputFrame>();
         _framesToSend = new List<InputFrame>();
         _localInputHistory = new List<InputFrameHistoryItem>();
         _authorativeInputHistory = new List<InputFrameHistoryItem>();
@@ -85,7 +87,7 @@ public class InputListener {
             _nextActions.Clear();
         }
 
-        _framesToPlay.Add(_currentInputFrame);
+        _framesToPlay.Enqueue(_currentInputFrame);
         _framesToSend.Add(_currentInputFrame);
         _currentInputFrame.actions = null;
     }
@@ -95,10 +97,9 @@ public class InputListener {
             return;
         }
 
-        InputFrame frame = _framesToPlay[0];
+        InputFrame frame = _framesToPlay.Dequeue();
         RaisePlayFrame(_speed, frame);
         _localInputHistory.Add(GetMovementHistoryItem(frame, pTransform.position.x, pTransform.position.y, pTransform.position.z));
-        _framesToPlay.RemoveAt(0);
         if (_currentFrame % _frameSyncRate == 0) {
             RaiseSyncFrame();
         }
@@ -121,6 +122,7 @@ public class InputListener {
                 _localInputHistory.RemoveAt(localItemIndex);//TODO remove localInputHistoryItems (how many + how far, all input before that?)
             }
 
+            _authorativeFrame = serverItem.frame;
             _authorativeInputHistory.RemoveAt(0);
         }
     }
@@ -138,7 +140,9 @@ public class InputListener {
     }
 
     public virtual void AddFramesToPlay (List<InputFrame> pFrames) {
-        _framesToPlay.AddRange(pFrames);
+        for (int i = 0; i < pFrames.Count; i++) {
+            _framesToPlay.Enqueue(pFrames[i]);
+        }
     }
 
     public virtual void AddAuthoritativeInputHistory (List<InputFrameHistoryItem> pHistory) {
