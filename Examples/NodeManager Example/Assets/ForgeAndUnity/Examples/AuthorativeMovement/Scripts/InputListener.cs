@@ -109,13 +109,11 @@ public class InputListener {
         ClearLocalInputHistory(_authorativeFrame);
         while (_authorativeInputHistory.Count > 0) {
             InputFrameHistoryItem serverItem = _authorativeInputHistory.Dequeue();
-            //TODO: check for localItemIndex - we still need it?
-            int localItemIndex;
-            InputFrameHistoryItem localItem = TryGetMatchingLocalInputHistory(serverItem.frame, out localItemIndex);
-            if (localItemIndex < 0) {
+            InputFrameHistoryItem localItem = FindLocalInputHistoryItemOrDefault(serverItem.frame);
+            if (localItem.frame == 0) {
                 continue;
             }
-            
+
             float distance = GetHistoryDistance(serverItem, localItem);
             if (distance > _reconcileDistance) {
                 var itemsToReconcile = _localInputHistory.Where(x => x.frame >= serverItem.frame);
@@ -180,16 +178,13 @@ public class InputListener {
         };
     }
 
-
-    public virtual InputFrameHistoryItem TryGetMatchingLocalInputHistory (uint pAuthorativeFrame, out int pIndex) {
+    public virtual InputFrameHistoryItem FindLocalInputHistoryItemOrDefault (uint pAuthorativeFrame) {
         for (int i = 0; i < _localInputHistory.Count; i++) {
             if (_localInputHistory[i].frame == pAuthorativeFrame) {
-                pIndex = i;
                 return _localInputHistory[i];
             }
         }
 
-        pIndex = -1;
         return default(InputFrameHistoryItem);
     }
 
