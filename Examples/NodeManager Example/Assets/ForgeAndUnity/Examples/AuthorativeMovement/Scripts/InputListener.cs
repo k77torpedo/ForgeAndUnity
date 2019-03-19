@@ -16,7 +16,7 @@ public class InputListener {
     protected uint                                      _currentFrame;
     protected uint                                      _authorativeFrame;
     protected InputFrame                                _currentInputFrame;
-    protected Dictionary<byte, ActionFrame>             _nextActions;
+    protected Dictionary<byte, ActionFrame>             _currentActions;
     protected Queue<InputFrame>                         _framesToPlay;
     protected List<InputFrame>                          _framesToSend;
     protected List<InputFrameHistoryItem>               _localInputHistory;
@@ -28,6 +28,7 @@ public class InputListener {
     public int                                          FrameSyncRate                       { get { return _frameSyncRate; } set { _frameSyncRate = value; } }
     public float                                        ReconcileDistance                   { get { return _reconcileDistance; } set { _reconcileDistance = value; } }
     public InputFrame                                   CurrentInputFrame                   { get { return _currentInputFrame; } }
+    public Dictionary<byte, ActionFrame>                CurrentActions                      { get { return _currentActions; } }
     public Queue<InputFrame>                            FramesToPlay                        { get { return _framesToPlay; } }
     public List<InputFrame>                             FramesToSend                        { get { return _framesToSend; } }
     public List<InputFrameHistoryItem>                  LocalInputHistory                   { get { return _localInputHistory; } }
@@ -44,15 +45,15 @@ public class InputListener {
 
     //Functions
     public InputListener () {
-        _nextActions = new Dictionary<byte, ActionFrame>();
+        _currentActions = new Dictionary<byte, ActionFrame>();
         _framesToPlay = new Queue<InputFrame>();
         _framesToSend = new List<InputFrame>();
         _localInputHistory = new List<InputFrameHistoryItem>();
         _authorativeInputHistory = new List<InputFrameHistoryItem>();
     }
 
-    public InputListener (float pMovementSpeed, int pFrameSyncRate) : this() {
-        _speed = pMovementSpeed;
+    public InputListener (float pSpeed, int pFrameSyncRate) : this() {
+        _speed = pSpeed;
         _frameSyncRate = pFrameSyncRate;
     }
 
@@ -70,7 +71,7 @@ public class InputListener {
     }
 
     public virtual void RecordAction(byte pActionId, byte[] pData = null) {
-        _nextActions[pActionId] = new ActionFrame() {
+        _currentActions[pActionId] = new ActionFrame() {
             actionId = pActionId,
             data = pData
         };
@@ -82,9 +83,9 @@ public class InputListener {
     }
 
     public virtual void SaveFrame () {
-        if (_nextActions.Count > 0) {
-            _currentInputFrame.actions = _nextActions.Values.ToArray();
-            _nextActions.Clear();
+        if (_currentActions.Count > 0) {
+            _currentInputFrame.actions = _currentActions.Values.ToArray();
+            _currentActions.Clear();
         }
 
         _framesToPlay.Enqueue(_currentInputFrame);
@@ -106,25 +107,39 @@ public class InputListener {
     }
 
     public virtual void ReconcileFrames () {
+        ClearLocalInputHistory(_authorativeFrame);
         while (_authorativeInputHistory.Count > 0) {
             InputFrameHistoryItem serverItem = _authorativeInputHistory[0];
+            //TODO: check for localItemIndex
             int localItemIndex;
             InputFrameHistoryItem localItem = TryGetMatchingLocalInputHistory(serverItem.frame, out localItemIndex);
             if (localItemIndex < 0) {
                 _authorativeInputHistory.RemoveAt(0);
                 continue;
             }
-
+            
             float distance = GetHistoryDistance(serverItem, localItem);
             if (distance > _reconcileDistance) {
                 var itemsToReconcile = _localInputHistory.Where(x => x.frame >= serverItem.frame);
                 RaiseReconcileFrames(distance, localItem, serverItem, itemsToReconcile);
-                _localInputHistory.RemoveAt(localItemIndex);//TODO remove localInputHistoryItems (how many + how far, all input before that?)
             }
 
             _authorativeFrame = serverItem.frame;
             _authorativeInputHistory.RemoveAt(0);
         }
+    }
+
+    public virtual void ClearLocalInputHistory (uint pUntilFrame) {
+        int count = 0;
+        for (int i = 0; i < _localInputHistory.Count; i++) {
+            if (_localInputHistory[i].frame <= pUntilFrame) {
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        _localInputHistory.RemoveRange(0, count);
     }
 
     public virtual byte[] DequeueFramesToSend () {
