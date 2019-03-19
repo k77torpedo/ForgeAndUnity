@@ -200,16 +200,16 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
 
     #region RPC-Callbacks
     public override void SyncInputs (RpcArgs pArgs) {
-        _listener.AddFramesToPlay(pArgs.GetNext<byte[]>().ByteArrayToObject<List<InputFrame>>());
+        _listener.AddFramesToPlay(pArgs.GetNext<byte[]>().ByteArrayToObject<InputFrame[]>());
     }
 
     public override void SyncInputHistory (RpcArgs pArgs) {
-        List<InputFrameHistoryItem> serverItems = pArgs.GetNext<byte[]>().ByteArrayToObject<List<InputFrameHistoryItem>>();
+        InputFrameHistoryItem[] serverItems = pArgs.GetNext<byte[]>().ByteArrayToObject<InputFrameHistoryItem[]>();
 
         // The serverItems are being sent unreliably and can arrive out of order. We check if the serverItems have arrived too late.
-        if (serverItems.Count > 0
+        if (serverItems.Length > 0
             && _listener.AuthorativeInputHistory.Count > 0
-            && serverItems[serverItems.Count - 1].inputFrame.frame <= _listener.AuthorativeFrame) {
+            && serverItems[serverItems.Length - 1].inputFrame.frame <= _listener.AuthorativeFrame) {
             return;
         }
         

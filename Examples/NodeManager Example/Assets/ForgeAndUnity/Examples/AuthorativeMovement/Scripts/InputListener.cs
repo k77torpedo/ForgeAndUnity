@@ -32,7 +32,7 @@ public class InputListener {
     public Queue<InputFrame>                            FramesToPlay                        { get { return _framesToPlay; } }
     public List<InputFrame>                             FramesToSend                        { get { return _framesToSend; } }
     public List<InputFrameHistoryItem>                  LocalInputHistory                   { get { return _localInputHistory; } }
-    public Queue<InputFrameHistoryItem>                  AuthorativeInputHistory            { get { return _authorativeInputHistory; } }
+    public Queue<InputFrameHistoryItem>                 AuthorativeInputHistory             { get { return _authorativeInputHistory; } }
 
     //Events
     public delegate void SyncFrameEvent ();
@@ -44,11 +44,12 @@ public class InputListener {
 
 
     //Functions
-    public InputListener () : this(1f, 1, 64) { }
+    public InputListener () : this(1f, 1, 0.6f, 0) { }
 
-    public InputListener (float pSpeed, int pFrameSyncRate, int pCapacity) {
+    public InputListener (float pSpeed, int pFrameSyncRate, float pReconcileDistance, int pCapacity) {
         _speed = pSpeed;
         _frameSyncRate = pFrameSyncRate;
+        _reconcileDistance = pReconcileDistance;
         _currentActions = new Dictionary<byte, ActionFrame>(pCapacity);
         _framesToPlay = new Queue<InputFrame>(pCapacity);
         _framesToSend = new List<InputFrame>(pCapacity);
@@ -138,25 +139,25 @@ public class InputListener {
     }
 
     public virtual byte[] DequeueFramesToSend () {
-        byte[] data = _framesToSend.ObjectToByteArray();
+        byte[] data = _framesToSend.ToArray().ObjectToByteArray();
         _framesToSend.Clear();
         return data;
     }
 
     public virtual byte[] DequeueLocalInputHistory () {
-        byte[] data = _localInputHistory.ObjectToByteArray();
+        byte[] data = _localInputHistory.ToArray().ObjectToByteArray();
         _localInputHistory.Clear();
         return data;
     }
 
-    public virtual void AddFramesToPlay (List<InputFrame> pFrames) {
-        for (int i = 0; i < pFrames.Count; i++) {
+    public virtual void AddFramesToPlay (InputFrame[] pFrames) {
+        for (int i = 0; i < pFrames.Length; i++) {
             _framesToPlay.Enqueue(pFrames[i]);
         }
     }
 
-    public virtual void AddAuthoritativeInputHistory (List<InputFrameHistoryItem> pHistory) {
-        for (int i = 0; i < pHistory.Count; i++) {
+    public virtual void AddAuthoritativeInputHistory (InputFrameHistoryItem[] pHistory) {
+        for (int i = 0; i < pHistory.Length; i++) {
             _authorativeInputHistory.Enqueue(pHistory[i]);
         }
     }
