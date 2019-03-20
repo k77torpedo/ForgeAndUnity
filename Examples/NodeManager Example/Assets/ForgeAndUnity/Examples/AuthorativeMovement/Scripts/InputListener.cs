@@ -163,10 +163,7 @@ public class InputListener {
     }
 
     public virtual float GetHistoryDistance (InputFrameHistoryItem pServerItem, InputFrameHistoryItem pLocalItem) {
-        return Vector3.Distance(
-            new Vector3(pLocalItem.xPosition, pLocalItem.yPosition, pLocalItem.zPosition),
-            new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition)
-        );
+        return Mathf.Sqrt((pServerItem.xPosition - pLocalItem.xPosition) * (pServerItem.xPosition - pLocalItem.xPosition) + (pServerItem.yPosition - pLocalItem.yPosition) * (pServerItem.yPosition - pLocalItem.yPosition) + (pServerItem.zPosition - pLocalItem.zPosition) * (pServerItem.zPosition - pLocalItem.zPosition));
     }
 
     public virtual InputFrameHistoryItem GetMovementHistoryItem (InputFrame pFrame, float pXPosition, float pYPosition, float pZPosition) {
