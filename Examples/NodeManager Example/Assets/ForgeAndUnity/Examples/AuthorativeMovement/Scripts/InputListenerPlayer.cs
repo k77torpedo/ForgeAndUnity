@@ -62,7 +62,6 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         // Reconcile frames when the client is too far away from the server-position.
         if (_isOwner) {
             _listener.ReconcileFrames();
-            CorrectError();
         }
 
         // The server sets the position on the network for everybody else.
@@ -88,6 +87,9 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         if (Input.GetKeyDown(KeyCode.X)) {
             transform.Translate((Vector3.forward + Vector3.left) * 3f);
         }
+
+        // If our position is too far from the server-position we correct it here.
+        CorrectError();
     }
 
     void OnCollisionEnter (Collision pCollision) {
@@ -155,8 +157,9 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     }
 
     void CorrectError () {
-        if (_errorMargin.sqrMagnitude > 0.006f) {
+        if (_errorMargin.sqrMagnitude > 0.0001f) {
             Vector3 lerp = Vector3.Lerp(Vector3.zero, _errorMargin, 0.15f);
+            Debug.Log("Correcting Error: " + lerp);
             _errorMargin -= lerp;
             transform.position += lerp;
         }
