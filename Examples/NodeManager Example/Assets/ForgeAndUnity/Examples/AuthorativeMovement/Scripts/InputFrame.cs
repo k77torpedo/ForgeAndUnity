@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// A frame of input a player has done.
+/// A frame of input a player has done with an <see cref="InputListener"/>.
 /// </summary>
 [System.Serializable]
 public struct InputFrame {

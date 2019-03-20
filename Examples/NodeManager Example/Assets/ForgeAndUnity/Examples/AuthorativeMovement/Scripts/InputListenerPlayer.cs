@@ -159,7 +159,6 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     void CorrectError () {
         if (_errorMargin.sqrMagnitude > 0.0001f) {
             Vector3 lerp = Vector3.Lerp(Vector3.zero, _errorMargin, 0.15f);
-            Debug.Log("Correcting Error: " + lerp);
             _errorMargin -= lerp;
             transform.position += lerp;
         }
