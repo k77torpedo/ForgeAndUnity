@@ -100,7 +100,7 @@ public class InputListener {
 
         InputFrame frame = _framesToPlay.Dequeue();
         RaisePlayFrame(_speed, frame);
-        _localInputHistory.Add(GetMovementHistoryItem(frame, pTransform.position.x, pTransform.position.y, pTransform.position.z));
+        _localInputHistory.Add(GetMovementHistoryItem(ref frame, pTransform.position.x, pTransform.position.y, pTransform.position.z));
         if (_currentFrame % _frameSyncRate == 0) {
             RaiseSyncFrame();
         }
@@ -115,7 +115,7 @@ public class InputListener {
                 continue;
             }
 
-            float distance = GetHistoryDistance(serverItem, localItem);
+            float distance = GetHistoryDistance(ref serverItem, ref localItem);
             if (distance > _reconcileDistance) {
                 var itemsToReconcile = _localInputHistory.Where(x => x.inputFrame.frame >= serverItem.inputFrame.frame);
                 RaiseReconcileFrames(distance, localItem, serverItem, itemsToReconcile);
@@ -162,11 +162,11 @@ public class InputListener {
         }
     }
 
-    public virtual float GetHistoryDistance (InputFrameHistoryItem pServerItem, InputFrameHistoryItem pLocalItem) {
+    protected virtual float GetHistoryDistance (ref InputFrameHistoryItem pServerItem, ref InputFrameHistoryItem pLocalItem) {
         return Mathf.Sqrt((pServerItem.xPosition - pLocalItem.xPosition) * (pServerItem.xPosition - pLocalItem.xPosition) + (pServerItem.yPosition - pLocalItem.yPosition) * (pServerItem.yPosition - pLocalItem.yPosition) + (pServerItem.zPosition - pLocalItem.zPosition) * (pServerItem.zPosition - pLocalItem.zPosition));
     }
 
-    public virtual InputFrameHistoryItem GetMovementHistoryItem (InputFrame pFrame, float pXPosition, float pYPosition, float pZPosition) {
+    protected virtual InputFrameHistoryItem GetMovementHistoryItem (ref InputFrame pFrame, float pXPosition, float pYPosition, float pZPosition) {
         return new InputFrameHistoryItem() {
             xPosition = pXPosition,
             yPosition = pYPosition,
