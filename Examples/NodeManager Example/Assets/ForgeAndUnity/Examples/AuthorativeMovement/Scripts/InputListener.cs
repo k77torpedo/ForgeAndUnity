@@ -162,6 +162,16 @@ public class InputListener {
         }
     }
 
+    public virtual InputFrameHistoryItem FindLocalInputHistoryItemOrDefault (uint pAuthorativeFrame) {
+        for (int i = 0; i < _localInputHistory.Count; i++) {
+            if (_localInputHistory[i].inputFrame.frame == pAuthorativeFrame) {
+                return _localInputHistory[i];
+            }
+        }
+
+        return default(InputFrameHistoryItem);
+    }
+
     protected virtual float GetHistoryDistance (ref InputFrameHistoryItem pServerItem, ref InputFrameHistoryItem pLocalItem) {
         return Mathf.Sqrt((pServerItem.xPosition - pLocalItem.xPosition) * (pServerItem.xPosition - pLocalItem.xPosition) + (pServerItem.yPosition - pLocalItem.yPosition) * (pServerItem.yPosition - pLocalItem.yPosition) + (pServerItem.zPosition - pLocalItem.zPosition) * (pServerItem.zPosition - pLocalItem.zPosition));
     }
@@ -173,16 +183,6 @@ public class InputListener {
             zPosition = pZPosition,
             inputFrame = pFrame
         };
-    }
-
-    public virtual InputFrameHistoryItem FindLocalInputHistoryItemOrDefault (uint pAuthorativeFrame) {
-        for (int i = 0; i < _localInputHistory.Count; i++) {
-            if (_localInputHistory[i].inputFrame.frame == pAuthorativeFrame) {
-                return _localInputHistory[i];
-            }
-        }
-
-        return default(InputFrameHistoryItem);
     }
 
     public virtual void RaiseSyncFrame () {
