@@ -106,13 +106,14 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         }
 
         var GuiString = "'WASD' to move, 'Spacebar' to jump,'X' to test Server-Reconciliation.\r\n";
-        GuiString += "NetworkId: " + networkObject.NetworkId + "\r\n";
         GuiString += "Position: " + transform.position + "\r\n";
         GuiString += "Velocity: " + _body.velocity + "\r\n";
         GuiString += "IsJumping: " + _isJumping + "\r\n";
         GuiString += "JumpStep: " + ((_isJumping && _listener.CurrentActions.ContainsKey(1)) ? _listener.CurrentActions[1].data[0] : 0) + "\r\n";
+        GuiString += "My current Frame: " + _listener.CurrentFrame + "\r\n";
+        GuiString += "Last server Frame: " + _listener.AuthorativeFrame + "\r\n";
         GuiString += "Frames ahead of the Server: " + (_listener.CurrentFrame - _listener.AuthorativeFrame) + "\r\n";
-        GUI.Label(new Rect(5, 5, 800, 800), GuiString);
+        GUI.Label(new Rect(25, 10, 800, 800), GuiString);
     }
 
     #endregion
@@ -155,7 +156,7 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
     void ReconcileFrames (float pDistance, InputFrameHistoryItem pLocalItem, InputFrameHistoryItem pServerItem, IEnumerable<InputFrameHistoryItem> pItemsToReconcile) {
         // Here we provide an implementation for the reconciling and replaying of frames if anything went wrong.
 
-        // We replay all our frames based on the servers position and calculate the marging/distance of error.
+        // We replay all our frames starting on the servers position and calculate the marging/distance of error.
         Vector3 serverPosition = new Vector3(pServerItem.xPosition, pServerItem.yPosition, pServerItem.zPosition);
         foreach (var item in pItemsToReconcile) {
             serverPosition += MoveDelta(_listener.Speed, item.inputFrame);
@@ -226,9 +227,9 @@ public class InputListenerPlayer : InputListenerPlayerBehavior {
         InputFrameHistoryItem[] serverItems = pArgs.GetNext<byte[]>().ByteArrayToObject<InputFrameHistoryItem[]>();
 
         // The serverItems are being sent unreliably and can arrive out of order. We check if the serverItems have arrived too late.
-        if (serverItems.Length > 0
-            && _listener.AuthorativeInputHistory.Count > 0
-            && serverItems[serverItems.Length - 1].inputFrame.frame <= _listener.AuthorativeFrame) {
+        if (serverItems.Length == 0 
+            || serverItems[serverItems.Length - 1].inputFrame.frame <= _listener.AuthorativeFrame 
+            || (_listener.AuthorativeInputHistory.Count > 0 && _listener.AuthorativeInputHistory.Peek().inputFrame.frame <= serverItems[serverItems.Length - 1].inputFrame.frame)) {
             return;
         }
         
