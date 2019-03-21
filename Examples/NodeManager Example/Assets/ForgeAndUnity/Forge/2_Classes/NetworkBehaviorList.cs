@@ -48,7 +48,7 @@ namespace ForgeAndUnity.Forge {
                 }
 
                 _networkBehaviors.Add(pItems[i].CreateCode, pItems[i]);
-                _nameToCreateCode.Add(pItems[i].Name.ToLower(), pItems[i].CreateCode);
+                _nameToCreateCode.Add(pItems[i].Name, pItems[i].CreateCode);
             }
         }
 
@@ -75,7 +75,7 @@ namespace ForgeAndUnity.Forge {
 
         public virtual int GetCreateCodeFromName (string pName) {
             int createCode;
-            if (!_nameToCreateCode.TryGetValue((pName ?? string.Empty).ToLower(), out createCode)) {
+            if (!_nameToCreateCode.TryGetValue((pName ?? string.Empty), out createCode)) {
                 return -1;
             }
 

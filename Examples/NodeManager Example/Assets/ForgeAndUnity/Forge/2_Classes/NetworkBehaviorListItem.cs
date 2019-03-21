@@ -20,6 +20,7 @@ namespace ForgeAndUnity.Forge {
         //Functions
         public NetworkBehaviorListItem (int pCreateCode, string pName, GameObject pNetworkBehavior) {
             _createCode = pCreateCode;
+            _name = pName;
             _networkBehavior = pNetworkBehavior;
         }
     }
