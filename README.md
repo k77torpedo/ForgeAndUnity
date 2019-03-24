@@ -66,6 +66,10 @@ I recommend at least Unity 2018.3.6f1. If you have issues try upgrading to this 
 
 ![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
 
+# Todo (Please bare with me :) )
+- What are services? How to make a service?
+- How are the Nodes communicating with each other?
+- Unity-limitations to keep in mind (Static GameObjects + NavMeshAgents and NavMeshes)
 
 ## More to come :)
 
