@@ -88,12 +88,7 @@ namespace ForgeAndUnity.Unity {
         }
 
         public virtual void Free (T pIdentifier) {
-            if (!_identifiers.Contains(pIdentifier)) {
-                return;
-            }
-
-            _identifiers.Remove(pIdentifier);
-            if (_freeIds.Contains(pIdentifier) || !_useFreeIds) {
+            if (!_identifiers.Remove(pIdentifier) || !_useFreeIds || _freeIds.Contains(pIdentifier)) {
                 return;
             }
 
@@ -105,9 +100,7 @@ namespace ForgeAndUnity.Unity {
                 return false;
             }
 
-            if (_freeIds.Contains(pIdentifier)) {
-                _freeIds.Remove(pIdentifier);
-            }
+            _freeIds.Remove(pIdentifier);
 
             return _identifiers.Add(pIdentifier);
         }
