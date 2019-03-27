@@ -7,6 +7,9 @@
 ## What is it?
 This project is an alternative implementation of the standard `NetworkManager` that comes out-of-the-box with Forge Networking Remastered as an attempt to provide functionality like a persistent world or dungeon instancing in one or more servers.
 
+## Demonstration
+![Demonstration](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/demonstration.gif)
+
 ## When to use it?
 * You need your game to be split up into smaller parts and/or want to be able to run one game on multiple servers. 
 * You want your clients to only connect to and see one part of the world instead of everything. 
