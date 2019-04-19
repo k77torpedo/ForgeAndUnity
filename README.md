@@ -143,7 +143,7 @@ Be aware that when you create a dynamic scene like a new dungeon instance or a p
 ### Which is the correct IsServer I should use?
 To check if you are the server or the client you can either globally check for `NodeManager.IsServer` or locally check for `networkObject.IsServer` in your `NetworkBehaviors` from Forge Networking Remastered.
 
-Do not use `NodeManager.MasterNode.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or if it is the host (server to server communication).
+Do not use `NodeManager.MasterNode.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or host within Server-To-Server communication.
 
 # Todo (Please bare with me :) )
 - What are services? How to make a service?
