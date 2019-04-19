@@ -145,6 +145,11 @@ To check if you are the server or the client you can either globally check for `
 
 Do not use `NodeManager.MasterNode.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or host within Server-To-Server communication.
 
+### My Scene is not being created or a wrong scene is created.
+Make sure that all Unity-Scenes you want to create as a `NetworkScene` are added in your Build-Settings. A Scene that is not added to your Build-Settings can't be created during runtime.
+
+Also make sure you have the correct BuildIndex when creating your `NetworkScene`.
+
 # Todo (Please bare with me :) )
 - What are services? How to make a service?
 - How are the Nodes communicating with each other?
