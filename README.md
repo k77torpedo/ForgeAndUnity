@@ -233,6 +233,15 @@ Please see the `NetworkSceneTeleporter`-Prefab and `NetworkSceneTeleporter`-Scri
 
 # The NodeManager
 ## What does the NodeManager do?
+The `NodeManager` helps you with the following tasks:
+* Create and remove `NetworkScenes` without name-collision
+* Redirect instantiation of NetworkBehaviors to the correct `NetworkSceneManagers`
+* Establish and maintain Server-To-Server communication
+
+The `NodeManager` is the central point for creating, removing and looking up `NetworkScenes`. It supports you with several helper-functions like `FindNetworkSceneItem` or `FindNetworkSceneTemplate` to make handling all your scenes easier. It exposes a variety of events for you within `NetworkScene`-creation and `NetworkBehavior`-instatiaton to always let you know what is going on.
+
+Starting the `NodeManager` as a server or a client is also streamlined through its respective `StartAsServer()`- or `StartAsClient()`-functions.
+
 ## NodeManager-Parameters
 ## Server-To-Server Communication
 ## NodeMaps
@@ -282,7 +291,7 @@ Be aware that when you create a dynamic scene like a new dungeon instance or a p
 ### Which is the correct IsServer I should use?
 To check if you are the server or the client you can either globally check for `NodeManager.IsServer` or locally check for `networkObject.IsServer` in your `NetworkBehaviors` from Forge Networking Remastered.
 
-Do not use `NodeManager.MasterNode.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or host within Server-To-Server communication. Also do not use `NetworkManager.IsServer` as that is the default `NetworkManager` of Forge Networking Remastered we are not using.
+Do not use `NodeManager.MasterManager.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or host within Server-To-Server communication. Also do not use `NetworkManager.IsServer` as that is the default `NetworkManager` of Forge Networking Remastered we are not using.
 
 ### My Scene is not being created or a wrong scene is created.
 Make sure that all Unity-Scenes you want to create as a `NetworkScene` are added in your Build-Settings. A Scene that is not added to your Build-Settings can't be created during runtime.
