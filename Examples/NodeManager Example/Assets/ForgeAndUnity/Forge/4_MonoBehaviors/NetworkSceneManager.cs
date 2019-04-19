@@ -157,7 +157,7 @@ namespace ForgeAndUnity.Forge {
                 ((TCPClient)client).Connect(_settings.ClientAddress.Ip, _settings.ClientAddress.Port);
             } else {
                 client = new UDPClient();
-                if (_settings.ClientNATAddress.Ip.Trim().Length == 0) {
+                if (_settings.ClientNATAddress == null || _settings.ClientNATAddress.Ip == null || _settings.ClientNATAddress.Ip.Trim().Length == 0) {
                     ((UDPClient)client).Connect(_settings.ClientAddress.Ip, _settings.ClientAddress.Port);
                 } else {
                     ((UDPClient)client).Connect(_settings.ClientAddress.Ip, _settings.ClientAddress.Port, _settings.ClientNATAddress.Ip, _settings.ClientNATAddress.Port);
