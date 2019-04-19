@@ -185,8 +185,21 @@ if (callback.State == ServiceCallbackStateEnum.AWAITING_RESPONSE) {
 Altough it involves a bit more code we can still check for success!
 
 ## Create a NetworkBehavior in a specific NetworkScene
+You can instantiate new `NetworkBehaviors` as shown below:
 ```
+// Instantiate a new NetworkBehavior in the current NetworkScene
+string currentSceneName = gameObject.scene.name;
+int playerCreateCode = 1;
+NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, playerCreateCode, null, transform.position, transform.rotation);
 ```
+If you prefer readability you can also instantiate via name:
+```
+// Instantiate a new NetworkBehavior in the current NetworkScene
+string currentSceneName = gameObject.scene.name;
+NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, "Player", null, transform.position, transform.rotation);
+```
+You can setup the names for each `NetworkBehavior` in the `NetworkBehaviorList` of the `NodeManager`.
+
 ## Create a NetworkBehavior in a specific NetworkScene on another Server
 ```
 ```
