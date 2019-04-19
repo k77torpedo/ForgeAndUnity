@@ -20,18 +20,55 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.7 Overview](#overview)
 
-[2. How to use](#how-to-use)
+[2. How to ...?](#how-to-)
 
-[3. Best Practices](#best-practices)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.1 Create a NetworkScene](#create-a-networkscene)
 
-[4. Unity Limitations](#unity-limitations)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.2 Create a NetworkScene on another Server](#create-a-networkscene-on-another-server)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.1 NavMeshes and SceneOffset](#navmeshes-and-sceneoffset)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.3 Create a NetworkBehavior in a specific NetworkScene](#create-a-networkbehavior-in-a-specific-networkscene)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.2 Static GameObjects and SceneOffset](#static-gameobjects-and-sceneoffset)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.4 Create a NetworkBehavior in a specific NetworkScene on another Server](#create-a-networkbehavior-in-a-specific-networkscene-on-another-server)
 
-[5. FAQ](#faq)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.5 Transport the Player to another NetworkScene on any Server](#transport-the-player-to-another-networkscene-on-any-server)
 
+[3. The NodeManager](#the-nodemanager)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.1 What does the NodeManager do?](#what-does-the-nodemanager-do)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.2 NodeManager-Parameters](#nodemanager-parameters)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.3 Server-To-Server Communication](#server-to-server-communication)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.4 NodeMaps](#nodemaps)
+
+[4. NetworkSceneManager](#networkscenemanager)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.1 What does the NetworkSceneManager do?](#what-does-the-networkscenemanager-do)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.2 NetworkSceneManager-Parameters](#networkscenemanager-parameters)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.3 NetworkBehaviorLists](#networkbehaviorlists)
+
+[5. Best Practices](#best-practices)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5.1 Best Practice #1: Change parts you don't like!](#best-practice-1-change-parts-you-dont-like)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5.2 Best Practice #2: Prefix your Unity-Scenes!](#best-practice-2-prefix-your-unity-scenes)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5.3 Best Practice #3: Change to a better Serializer!](#best-practice-3-change-to-a-better-serializer)
+
+[6. Unity Limitations](#unity-limitations)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.1 NavMeshes and SceneOffset](#navmeshes-and-sceneoffset)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6.2 Static GameObjects and SceneOffset](#static-gameobjects-and-sceneoffset)
+
+[7. FAQ](#faq)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.3 Which is the correct IsServer I should use?](#which-is-the-correct-isserver-i-should-use)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.3 My Scene is not being created or a wrong scene is created.](#my-scene-is-not-being-created-or-a-wrong-scene-is-created)
 
 # Introduction
 ## What is it?
@@ -110,14 +147,14 @@ Click on the images below to enlarge.
 ## Transport the Player to another NetworkScene on any Server
 
 # The NodeManager
-## What does it do?
-## Parameters
+## What does the NodeManager do?
+## NodeManager-Parameters
 ## Server-To-Server Communication
 ## NodeMaps
 
 # The NetworkSceneManager
-## What does it do?
-## Parameters
+## What does the NetworkSceneManager do?
+## NetworkSceneManager-Parameters
 ## NetworkBehaviorLists
 
 
@@ -147,12 +184,12 @@ All internal serialization of data is currently done via C#s `BitFormatter` whic
 
 # Unity Limitations
 ## NavMeshes and SceneOffset
-_Info: The `NetworkSceneTemplate.SceneOffset` allows a scene to be created with an offset so that it does not physically overlap with existing scenes._
+_Info: The `NetworkSceneTemplate.SceneOffset` allows a `NetworkScene` to be created with an offset so that it does not physically overlap with existing scenes._
 
 Be aware that when you create a dynamic scene like a new dungeon instance or a player housing instance that the `NetworkSceneTemplate.SceneOffset` will not move the NavMesh associated with the scene. I recommend using the NavMeshTools from Unity to be able to create NavMeshes during runtime solve this problem.
 
 ## Static GameObjects and SceneOffset
-_Info: The `NetworkSceneTemplate.SceneOffset` allows a scene to be created with an offset so that it does not physically overlap with existing scenes._
+_Info: The `NetworkSceneTemplate.SceneOffset` allows a `NetworkScene` to be created with an offset so that it does not physically overlap with existing scenes._
 
 Be aware that when you create a dynamic scene like a new dungeon instance or a player housing instance that the `NetworkSceneTemplate.SceneOffset` can't be properly applied to the Unity-Scene when the `GameObjects` of the Unity-Scene are marked as `static`.
 
