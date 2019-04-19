@@ -116,10 +116,21 @@ Click on the images below to enlarge.
 
 # How to ...?
 ## Create a NetworkScene
+```
+```
 ## Create a NetworkScene on another Server
+```
+```
 ## Create a NetworkBehavior in a specific NetworkScene
+```
+```
 ## Create a NetworkBehavior in a specific NetworkScene on another Server
+```
+```
 ## Transport the Player to another NetworkScene on any Server
+Transferring a player to another `NetworkScene` has many obstacles we need to overcome. Timouts, errors, what if the `NetworkScene` is not there anymore? The `NetworkSceneTeleporter` is a prefab that already handles these things out-of-the box and gives you a starting point to implement your own logic if you want to.
+
+Please see the `NetworkSceneTeleporter`-Prefab and `NetworkSceneTeleporter`-Script that are included in this project for more information.
 
 # The NodeManager
 ## What does the NodeManager do?
