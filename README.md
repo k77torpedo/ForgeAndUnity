@@ -116,8 +116,37 @@ Click on the images below to enlarge.
 
 # How to ...?
 ## Create a NetworkScene
+Every `NetworkScene` is created from a `NetworkSceneTemplate`. Creating a `NetworkSceneTemplate` during runtime is very easy and straight-forward as seen below:
 ```
+// Create the connection-information for the NetworkScene
+NetworkSceneManagerSetting setting = new NetworkSceneManagerSetting();
+setting.MaxConnections = 64;
+setting.UseTCP = false;
+setting.UseMainThreadManagerForRPCs = true;
+setting.ServerAddress = new NetworkSceneManagerEndpoint("127.0.0.1", 15000);
+setting.ClientAddress = new NetworkSceneManagerEndpoint("127.0.0.1", 15000);
+
+// Create the NetworkSceneTemplate with our connection-information
+NetworkSceneTemplate template = new NetworkSceneTemplate();
+template.BuildIndex = 1;
+template.SceneName = "My_Custom_NetworkScene_Name";
+template.Settings = setting;
+
+//Create the NetworkScene
+NodeManager.Instance.CreateNetworkScene(template);
 ```
+You set up the connection-information, tell the template what BuildIndex you want to load and under what scene-name and the `NodeManager` will do the rest for you! To take it even one step further you can hook up to events that will be emitted during scene-creation. This lets you know when exactly your scene is ready to instantiate your `NetworkBehaviors`:
+
+```
+//Create the NetworkScene
+NetworkSceneItem scene = NodeManager.Instance.CreateNetworkScene(template);
+if (!scene.IsReady) {
+    scene.OnReady += (pItem) => {
+        Debug.Log("Your NetworkScene is ready!!!");
+    };
+}
+```
+
 ## Create a NetworkScene on another Server
 ```
 ```
