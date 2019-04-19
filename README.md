@@ -69,19 +69,19 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 ## Features
 _Info: the term "NetworkScene" describes a Unity-Scene with a `NetworkManager` that is only handling the `NetworkBehaviors` in that Unity-Scene._
 
-* A Scene-based `NetworkManager` for easy creation of `NetworkScenes*`
-* Multiple `NetworkScenes*` per Server-Instance
-* Multiple Server-Instances (Can run the first 5 `NetworkScenes*` of your game on "Server_1" and another 3 `NetworkScenes*` on "Server_2")
+* A Scene-based `NetworkManager` for easy creation of `NetworkScenes`
+* Multiple `NetworkScenes` per Server-Instance
+* Multiple Server-Instances (Can run the first 5 `NetworkScenes` of your game on "Server_1" and another 3 `NetworkScenes` on "Server_2")
 * Provides extendable interconnection between Server-Instances out-of-the-box without a database
-* Supports creating `NetworkScenes*` from one Server in another Server
+* Supports creating `NetworkScenes` from one Server in another Server
 * Supports instantiating `NetworkBehaviors` from one Server in another Server
-* Clients can be instructed to change `NetworkScenes*` by the Server
-* Concept of "Static-Scenes": `NetworkScenes*` that are and should always be reachable under a certain IP and Port, basically the "static  world"/"overworld"
-* Concept of "Dynamic-Scenes": `NetworkScenes*` that are created on demand for things like Dungeon Instances or Player Housing Instances etc. and that will be destroyed again at some point
+* Clients can be instructed to change `NetworkScenes` by the Server
+* Concept of "Static-Scenes": `NetworkScenes` that are and should always be reachable under a certain IP and Port, basically the "static  world"/"overworld"
+* Concept of "Dynamic-Scenes": `NetworkScenes` that are created on demand for things like Dungeon Instances or Player Housing Instances etc. and that will be destroyed again at some point
 * Port-recycling for "Dynamic Scenes": If a "Dynamic Scene" is destroyed the port can be reused at a later time from a range of allowed Ports
-* A global registration system for "Dynamic Scenes" that all servers can lookup connection information in and for preventing name-collusion of `NetworkScenes*` across Server-Instances
-* Creating `NetworkScenes*` with a position-offset to prevent them physically overlapping each other
-* `NetworkScenes*` can try to reconnect/rebind after a set delay when disconnected
+* A global registration system for "Dynamic Scenes" that all servers can lookup connection information in and for preventing name-collusion of `NetworkScenes` across Server-Instances
+* Creating `NetworkScenes` with a position-offset to prevent them physically overlapping each other
+* `NetworkScenes` can try to reconnect/rebind after a set delay when disconnected
 
 ## Installation and Setup
 I recommend at least Unity 2018.3.6f1. If you have issues try upgrading to this or a higher version of Unity.
