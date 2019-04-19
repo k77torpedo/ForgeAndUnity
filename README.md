@@ -190,19 +190,42 @@ You can instantiate new `NetworkBehaviors` as shown below:
 // Instantiate a new NetworkBehavior in the current NetworkScene
 string currentSceneName = gameObject.scene.name;
 int playerCreateCode = 1;
-NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, playerCreateCode, null, transform.position, transform.rotation);
+NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, playerCreateCode);
 ```
 If you prefer readability you can also instantiate via name:
 ```
 // Instantiate a new NetworkBehavior in the current NetworkScene
 string currentSceneName = gameObject.scene.name;
-NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, "Player", null, transform.position, transform.rotation);
+NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, "Player");
 ```
 You can setup the names for each `NetworkBehavior` in the `NetworkBehaviorList` of the `NodeManager`.
 
 ## Create a NetworkBehavior in a specific NetworkScene on another Server
+Instantiating a new `NetworkBehavior` on another server is very similar to instantiating it locally as shown below:
 ```
+// Instantiate a new NetworkBehavior in a NetworkScene on another Node
+uint targetNodeId = 2;
+string sceneName = "NetworkSceneName_On_Node2";
+int monsterCreateCode = 2;
+NodeManager.Instance.InstantiateInNode(targetNodeId, sceneName, monsterCreateCode);
 ```
+As we sometimes need to make sure that something is successfully instantiated on another server we have the option to hook up on events to get notified on success or failure:
+
+```
+// Instantiate a new NetworkBehavior in a NetworkScene on another Node
+uint targetNodeId = 2;
+string sceneName = "NetworkSceneName_On_Node2";
+int monsterCreateCode = 2;
+ServiceCallback callback = NodeManager.Instance.InstantiateInNode(targetNodeId, sceneName, monsterCreateCode);
+if (callback.State == ServiceCallbackStateEnum.AWAITING_RESPONSE) {
+    callback.OnResponse += (pResponseTime, pResponseData, pSender) => {
+        if (pSender.State == ServiceCallbackStateEnum.RESPONSE_SUCCESS) {
+            Debug.Log("Your NetworkBehavior has successfully been instantiated!!!");
+        }
+    };
+}
+```
+
 ## Transport the Player to another NetworkScene on any Server
 Transferring a player to another `NetworkScene` has many obstacles we need to overcome. Timouts, errors, what if the `NetworkScene` is not there anymore? The `NetworkSceneTeleporter` is a prefab that already handles these things out-of-the box and gives you a starting point to implement your own logic if you want to.
 
