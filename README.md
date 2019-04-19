@@ -25,6 +25,8 @@ Additionally, at the time of writing the native Steam-Integration of the standar
 Be aware that if you want to use this over the standard `NetworkManager` or not depends on the scope and features of your own project and is at your own discretion.
 
 ## Features
+*The term "NetworkScene" describes a Unity-Scene with a `NetworkManager` that is only handling the `NetworkBehaviors` in that Unity-Scene.
+
 * A Scene-based `NetworkManager` for easy creation of `NetworkScenes*`
 * Multiple `NetworkScenes*` per Server-Instance
 * Multiple Server-Instances (Can run the first 5 `NetworkScenes*` of your game on "Server_1" and another 3 `NetworkScenes*` on "Server_2")
@@ -38,8 +40,6 @@ Be aware that if you want to use this over the standard `NetworkManager` or not 
 * A global registration system for "Dynamic Scenes" that all servers can lookup connection information in and for preventing name-collusion of `NetworkScenes*` across Server-Instances
 * Creating `NetworkScenes*` with a position-offset to prevent them physically overlapping each other
 * `NetworkScenes*` can try to reconnect/rebind after a set delay when disconnected
-
-*The term "NetworkScene" describes a Unity-Scene with a `NetworkManager` that is only handling the `NetworkBehaviors` in that Unity-Scene.
 
 ## Installation and Setup
 I recommend at least Unity 2018.3.6f1. If you have issues try upgrading to this or a higher version of Unity.
@@ -65,6 +65,7 @@ I recommend at least Unity 2018.3.6f1. If you have issues try upgrading to this 
 7) Press Start!
 
 ## Overview
+Click on the images below to enlarge.
 ![Overview abstract](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Overview.jpeg "Overview abstract")
 
 ![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
