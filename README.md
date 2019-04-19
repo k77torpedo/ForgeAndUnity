@@ -142,8 +142,8 @@ Click on the images below to enlarge.
 # How to ...?
 ## Create a NetworkScene
 ## Create a NetworkScene on another Server
-## Create a NetworkBehavior on a specific NetworkScene
-## Create a NetworkBehavior on a specific NetworkScene on another Server
+## Create a NetworkBehavior in a specific NetworkScene
+## Create a NetworkBehavior in a specific NetworkScene on another Server
 ## Transport the Player to another NetworkScene on any Server
 
 # The NodeManager
