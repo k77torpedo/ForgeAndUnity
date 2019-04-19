@@ -168,7 +168,7 @@ template.Settings = setting;
 uint targetNodeId = 2;
 NodeManager.Instance.CreateNetworkSceneInNode(targetNodeId, template);
 ```
-You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
+You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. Also be aware that you need to have at least one `Node` set as `IsMasterNode` as otherwise no Server-To-Server communication can happen. As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
 
 ```
 //Create the NetworkScene on another Node
