@@ -243,7 +243,7 @@ The `NodeManager` is the central point for creating, removing and looking up `Ne
 Starting the `NodeManager` as a server or a client is also streamlined through its respective `StartAsServer()`- or `StartAsClient()`-functions.
 
 ## NodeManager-Parameters
-
+![NodeManager in Unity](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/NodeManager.JPG "NodeManager")
 * **NetworkSceneManagerPrefab**: The `NetworkSceneManager` on this Prefab will be instantiated for all `NetworkScenes` to handle networking. Use this to provide a custom `NetworkSceneManager` if needed.
 * **AutoReconnectMasterManager**: When enabled the `NodeManager` will try to reconnect if it has lost its connection to the `MasterNode` in order to maintain Server-To-Server communication. If you only have one `Node` running as a server you should disable this.
 * **AutoReconnectMasterManagerInterval**: The interval in seconds to which the `NodeManager` should try to reconnect to the `MasterNode`.
