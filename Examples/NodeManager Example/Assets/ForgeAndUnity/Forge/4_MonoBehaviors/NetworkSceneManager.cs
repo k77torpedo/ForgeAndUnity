@@ -123,7 +123,7 @@ namespace ForgeAndUnity.Forge {
                 ((TCPServer)server).Connect(_settings.ServerAddress.Ip, _settings.ServerAddress.Port);
             } else {
                 server = new UDPServer(_settings.MaxConnections);
-                if (_settings.ServerNATAddress.Ip.Trim().Length == 0) {
+                if (_settings.ServerNATAddress == null || _settings.ServerNATAddress.Ip == null || _settings.ServerNATAddress.Ip.Trim().Length == 0) {
                     ((UDPServer)server).Connect(_settings.ServerAddress.Ip, _settings.ServerAddress.Port);
                 } else {
                     ((UDPServer)server).Connect(_settings.ServerAddress.Ip, _settings.ServerAddress.Port, _settings.ServerNATAddress.Ip, _settings.ServerNATAddress.Port);
