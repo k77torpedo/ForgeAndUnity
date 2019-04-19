@@ -106,12 +106,14 @@ Click on the images below to enlarge.
 
 # Best Practices
 ## Best Practice #1: Prefix your Unity-Scenes
-At any time and especially during scene-creation all Unity-Scenes must be named unique. Please prefix your Unity-Scene-Files so name-collision can be avoided. Instead of _Level_1_ use _template_Level_1_ or _t_Level_1_ as this ensures there are no name-collisions during scene-creation that may cause unexpected behavior.
+At any time and especially during scene-creation all Unity-Scenes must be named unique. Please prefix your Unity-Scene-Files so name-collision can be avoided. Instead of '_Level_1_' use '_template_Level_1_' or '_t_Level_1_' as this ensures there are no name-collisions during scene-creation that may cause unexpected behavior.
 
-Explanation: 
-To create a new `NetworkScene` the framework will first create an empty Unity-Scene with your desired scene-name (here 'Level_1') and put a `NetworkSceneManager` in it so it can be connected to.
 
-Then a second - the actual - scene will be created with the BuildIndex provided from the Unity-Scene-File and be merged with the other scene we created previously. This new scene will also be named 'Level_1' - in accordance to the Unity-Scene-File-Name. Now we have a name-collision. We have 2 Scenes with the name 'Level_1' that can't be merged because they both have the same name.
+Explanation:
+
+To create a new `NetworkScene` the framework will first create an _empty_ Unity-Scene with your desired scene-name (here 'Level_1') and put a `NetworkSceneManager` in it so it can be connected to.
+
+Then a second - _the actual_ - scene will be created with the BuildIndex provided from the Unity-Scene-File and be merged with the other scene we created previously. This new scene will also be named 'Level_1' - in accordance to the Unity-Scene-File-Name. Now we have a name-collision. We have 2 Scenes with the name 'Level_1' that can't be merged because they both have the same name.
 
 # Unity Limitations
 ## NavMeshes and SceneOffset
