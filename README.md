@@ -116,7 +116,7 @@ Click on the images below to enlarge.
 
 # How to ...?
 ## Create a NetworkScene
-Every `NetworkScene` is created from a `NetworkSceneTemplate`. Creating a `NetworkSceneTemplate` during runtime is very easy and straight-forward as seen below:
+Every `NetworkScene` is created from a `NetworkSceneTemplate`. Creating a `NetworkSceneTemplate` during runtime is very easy and straight-forward as shown below:
 ```
 // Create the connection-information for the NetworkScene
 NetworkSceneManagerSetting setting = new NetworkSceneManagerSetting();
@@ -148,8 +148,42 @@ if (!scene.IsReady) {
 ```
 
 ## Create a NetworkScene on another Server
+Creating a `NetworkScene` on another server is pretty easy and very similar to creating it locally as shown below:
 ```
+// Create the connection-information for the NetworkScene
+NetworkSceneManagerSetting setting = new NetworkSceneManagerSetting();
+setting.MaxConnections = 64;
+setting.UseTCP = false;
+setting.UseMainThreadManagerForRPCs = true;
+setting.ServerAddress = new NetworkSceneManagerEndpoint("127.0.0.1", 15000);
+setting.ClientAddress = new NetworkSceneManagerEndpoint("127.0.0.1", 15000);
+
+// Create the NetworkSceneTemplate with our connection-information
+NetworkSceneTemplate template = new NetworkSceneTemplate();
+template.BuildIndex = 1;
+template.SceneName = "My_Custom_NetworkScene_Name";
+template.Settings = setting;
+
+//Create the NetworkScene on another Node
+uint targetNodeId = 2;
+NodeManager.Instance.CreateNetworkSceneInNode(targetNodeId, template);
 ```
+You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
+
+```
+//Create the NetworkScene on another Node
+uint targetNodeId = 2;
+ServiceCallback callback = NodeManager.Instance.CreateNetworkSceneInNode(targetNodeId, template);
+if (callback.State == ServiceCallbackStateEnum.AWAITING_RESPONSE) {
+    callback.OnResponse += (pResponseTime, pResponseData, pSender) => {
+        if (pSender.State == ServiceCallbackStateEnum.RESPONSE_SUCCESS) {
+            Debug.Log("Your NetworkScene is ready!!!");
+        }
+    };
+}
+```
+Altough it involves a bit more code we can still check for success!
+
 ## Create a NetworkBehavior in a specific NetworkScene
 ```
 ```
