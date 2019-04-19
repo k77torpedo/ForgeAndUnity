@@ -105,14 +105,14 @@ Click on the images below to enlarge.
 # How to use
 
 # Best Practices
-## Best Practice #1: Change parts you don't like
+## Best Practice #1: Change parts you don't like!
 You can change and extend most of the code from the project without touching the core-files. Nearly everything in the `NodeManager` and `NetworkSceneManager` for example is marked as _virtual_ and you are encouraged to derive from these classes and _override_ them or extend parts and functions according to your project. Even the Prefabs that come with the project like the `NetworkSceneTeleporter` have all their functions marked as _virtual_ so you can quickly extend them.
 
 Also note that the `NodeManager` has a public parameter for providing your own `NetworkSceneManager`-Prefab that it should instantiate for all `NetworkScenes` which makes it even more easy to provide your custom-logic. 
 
 TL;DR: You can and should derive from all classes. You are encouraged to change bits and parts depending on the needs of your game!
 
-## Best Practice #2: Prefix your Unity-Scenes
+## Best Practice #2: Prefix your Unity-Scenes!
 At any time and especially during scene-creation all Unity-Scenes must be named unique. Please prefix your Unity-Scene-Files so name-collision can be avoided. Instead of '_Level_1_' use '_template_Level_1_' or '_t_Level_1_' as this ensures there are no name-collisions during scene-creation that may cause unexpected behavior.
 
 
@@ -121,6 +121,12 @@ Explanation:
 To create a new `NetworkScene` the framework will first create an _empty_ Unity-Scene with your desired scene-name (here 'Level_1') and put a `NetworkSceneManager` in it so it can be connected to.
 
 Then a second - _the actual_ - scene will be created with the BuildIndex provided from the Unity-Scene-File. This scene is to be merged with the other scene we created previously. The new scene will also be named 'Level_1' - in accordance to the Unity-Scene-File-Name. Now we have a name-collision. We have 2 Scenes with the name 'Level_1' that can't be merged because they both have the same name.
+
+## Best Practice #3: Change to a better Serializer!
+_Info: This is more reserved for the end of your project so don't overstress it._ 
+
+All internal serialization of data is currently done via C#s `BitFormatter` which is very flexible and undemanding in what it can serialize and deserialize but an atrocity in efficiency and performance. I just want to mention that you can switch to a different serializer at one point in time like _MsgPack_, _Ceras_ or _ZeroFormatter_. 
+
 
 # Unity Limitations
 ## NavMeshes and SceneOffset
