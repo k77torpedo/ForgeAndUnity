@@ -1,9 +1,33 @@
-# DISCLAIMER
-### Using this project in any test- or productive-environment is at your own discretion!
-### This project is still in heavy developement and large parts may change at any point in time.
+#### DISCLAIMER
+##### Using this project in any test- or productive-environment is at your own discretion!
+##### This project is still in heavy developement and large parts may change at any point in time.
 
 ---
+# Table of contents 
+[1. Introduction](#introduction)
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.1 What is it?](#what-is-it)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.2 Demonstration](#demonstration)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.3 When to use it?](#when-to-use-it)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.4 When not to use it?](#when-not-to-use-it)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.5 Features](#features)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.6 Installation and Setup](#installation-and-setup)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.7 Overview](#overview)
+
+[2. Usage and Best Practices](#usage-and-best-practices)
+
+[3. Unity Limitations](#unity-limitations)
+
+[4. FAQ](#faq)
+
+
+# Introduction
 ## What is it?
 This project is an alternative implementation of the standard `NetworkManager` that comes out-of-the-box with Forge Networking Remastered as an attempt to provide functionality like a persistent world or dungeon instancing in one or more servers.
 
@@ -70,6 +94,18 @@ Click on the images below to enlarge.
 ![Overview abstract](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Overview.jpeg "Overview abstract")
 
 ![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
+
+
+# Usage and Best Practices
+
+
+
+# Unity Limitations
+
+
+
+# FAQ
+
 
 # Todo (Please bare with me :) )
 - What are services? How to make a service?
