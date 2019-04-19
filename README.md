@@ -140,12 +140,14 @@ _Info: The `NetworkSceneTemplate.SceneOffset` allows a scene to be created with 
 Be aware that when you create a dynamic scene like a new dungeon instance or a player housing instance that the `NetworkSceneTemplate.SceneOffset` can't be properly applied to the Unity-Scene when the `GameObjects` of the Unity-Scene are marked as `static`.
 
 # FAQ
+### Which is the correct IsServer I should use?
+To check if you are the server or the client you can either globally check for `NodeManager.IsServer` or locally check for `networkObject.IsServer` in your `NetworkBehaviors` from Forge Networking Remastered.
 
+Do not use `NodeManager.MasterNode.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or if it is the host (server to server communication).
 
 # Todo (Please bare with me :) )
 - What are services? How to make a service?
 - How are the Nodes communicating with each other?
-- Unity-limitations to keep in mind (Static GameObjects + NavMeshAgents and NavMeshes)
 
 ## More to come :)
 
