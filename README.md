@@ -20,16 +20,18 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.7 Overview](#overview)
 
-[2. Usage and Best Practices](#usage-and-best-practices)
+[2. How to use](#how-to-use)
 
-[3. Unity Limitations](#unity-limitations)
+[3. Best Practices](#best-practices)
 
-[4. FAQ](#faq)
+[4. Unity Limitations](#unity-limitations)
+
+[5. FAQ](#faq)
 
 
 # Introduction
 ## What is it?
-This project is an alternative implementation of the standard `NetworkManager` that comes out-of-the-box with Forge Networking Remastered as an attempt to provide functionality like a persistent world or dungeon instancing in one or more servers.
+This project is an alternative implementation of the standard `NetworkManager` that comes out-of-the-box with Forge Networking Remastered as an attempt to provide functionality like a persistent world, dungeon instancing or the concept or 'rooms' in one or more servers.
 
 ## Demonstration
 ![Demonstration](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/demonstration.gif)
@@ -96,13 +98,20 @@ Click on the images below to enlarge.
 ![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
 
 
-# Usage and Best Practices
+# How to use
 
-
+# Best Practices
 
 # Unity Limitations
+## NavMeshes and `NetworkSceneTemplate.SceneOffset`
+_Info: The `NetworkSceneTemplate.SceneOffset` allows a scene to be created with an offset so that it does not physically overlap with existing scenes._
 
+Be aware that when you create a dynamic scene like a new dungeon instance or a player housing instance that the `NetworkSceneTemplate.SceneOffset` will not move the NavMesh associated with the scene. I recommend using the NavMeshTools from Unity to be able to create NavMeshes during runtime solve this problem.
 
+## Dynamic Scenes and `NetworkSceneTemplate.SceneOffset`
+_Info: The `NetworkSceneTemplate.SceneOffset` allows a scene to be created with an offset so that it does not physically overlap with existing scenes._
+
+Be aware that when you create a dynamic scene like a new dungeon instance or a player housing instance that the `NetworkSceneTemplate.SceneOffset` can't be properly applied to the Unity-Scene when the `GameObjects` of the Unity-Scene are marked as `static`.
 
 # FAQ
 
