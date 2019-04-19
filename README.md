@@ -66,9 +66,9 @@
 
 [7. FAQ](#faq)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.3 Which is the correct IsServer I should use?](#which-is-the-correct-isserver-i-should-use)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.1 Which is the correct IsServer I should use?](#which-is-the-correct-isserver-i-should-use)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.3 My Scene is not being created or a wrong scene is created.](#my-scene-is-not-being-created-or-a-wrong-scene-is-created)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.2 My Scene is not being created or a wrong scene is created.](#my-scene-is-not-being-created-or-a-wrong-scene-is-created)
 
 
 # Introduction
