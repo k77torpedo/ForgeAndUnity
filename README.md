@@ -105,7 +105,12 @@ Click on the images below to enlarge.
 # How to use
 
 # Best Practices
-## Best Practice #1: Prefix your Unity-Scenes
+## Best Practice #1: Change parts you don't like
+You can change and extend most of the code from the project without touching the core-files. Nearly everything in the `NodeManager` and `NetworkSceneManager` for example is marked as _virtual_ and I would like to encourage you to derive from these classes and _override_ them or extend parts and functions according to your project.
+
+Also note that the `NodeManager` has a public parameter for providing your own `NetworkSceneManager`-Prefab that it should instantiate for all `NetworkScenes` which makes it even more easy to provide your custom-logic. Again: you can derive from all classes and are encouraged to change bits and parts depending on the needs of your game!
+
+## Best Practice #2: Prefix your Unity-Scenes
 At any time and especially during scene-creation all Unity-Scenes must be named unique. Please prefix your Unity-Scene-Files so name-collision can be avoided. Instead of '_Level_1_' use '_template_Level_1_' or '_t_Level_1_' as this ensures there are no name-collisions during scene-creation that may cause unexpected behavior.
 
 
