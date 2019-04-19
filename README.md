@@ -252,9 +252,15 @@ Starting the `NodeManager` as a server or a client is also streamlined through i
 * **EnableSceneLookUpCaching**: When enabled all lookups of `NetworkScenes` for connection-data from other servers through the `MasterNode` will be cached to prevent unnecessary querying of the `MasterNode`.
 * **NodeMapSO**: When starting as a server the `NodeManager` will lookup the `Node` it should start as and initialize all `NetworkSceneTemplates` for that `Node` as _static_ `NetworkScenes`.
 * **ServiceNetworkBehaviorListSO**: All `NetworkBehaviors` in this `NetworkBehaviorList` will be initialized by the `MasterNode` to act as services for Server-To-Server communication. The only service is currently the `NodeService` which provides functionality to create `NetworkScenes` and `NetworkBehaviors` on other servers.
-* **NetworkSceneBehaviorListSO**: A list of all `NetworkBehaviors` that can be instantiated by any `NetworkSceneManager`.
+* **NetworkSceneBehaviorListSO**: A list of all `NetworkBehaviors` that can be instantiated by any `NetworkSceneManager` for its respective `NetworkScene`.
 
 ## Server-To-Server Communication
+In order for `NetworkBehaviors` and especially Players to move across server-instances we need Server-To-Server communication so that if a Player in 'Server A' moves to 'Server B' the data of the Player can be properly transmitted.
+
+How do servers communicate with each other you might ask? The answer to that would be very simple: all server play their own little Forge-Game to transmit information with each other where one server is the host (the `MasterNode`) and the other servers are the clients (all other `Nodes`). The `NetWorker` for this is located on `NodeManager.MasterManager`. Additionally, if you look at the `NodeService`-Script that is currently used for Server-To-Server communication you will find that it is just a simple `NetworkBehavior` instantiated like any other on the game the servers are playing with each other.
+
+This gives you all the flexibility of Forge Networking Remastered to extend Server-To-Server communication without introducing extra logic or restrictions. If you want the servers to communicate more information or add stuff like database-functionality across servers just make a `NetworkBehavior` and instantiate it on the game the servers are playing with each other - easy as that!
+
 ## NodeMaps
 
 # The NetworkSceneManager
@@ -275,8 +281,7 @@ TL;DR: You can and should derive from all classes. You are encouraged to change 
 At any time and especially during scene-creation all Unity-Scenes must be named unique. Please prefix your Unity-Scene-Files so name-collision can be avoided. Instead of '_Level_1_' use '_template_Level_1_' or '_t_Level_1_' as this ensures there are no name-collisions during scene-creation that may cause unexpected behavior.
 
 
-Explanation:
-
+Explanation:<br/>
 To create a new `NetworkScene` the framework will first create an _empty_ Unity-Scene with your desired scene-name (here 'Level_1') and put a `NetworkSceneManager` in it so it can be connected to.
 
 Then a second - _the actual_ - scene will be created with the BuildIndex provided from the Unity-Scene-File. This scene is to be merged with the other scene we created previously. The new scene will also be named 'Level_1' - in accordance to the Unity-Scene-File-Name. Now we have a name-collision. We have 2 Scenes with the name 'Level_1' that can't be merged because they both have the same name.
@@ -312,7 +317,8 @@ Also make sure you have the correct BuildIndex when creating your `NetworkScene`
 # Todo (Please bare with me :) )
 - What are services? How to make a service?
 - How are the Nodes communicating with each other?
-
+- Cleaner terminology througout documentation
+- Better use of markup, what a mess lol
 ## More to come :)
 
 
