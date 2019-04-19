@@ -25,7 +25,7 @@ Additionally, at the time of writing the native Steam-Integration of the standar
 Be aware that if you want to use this over the standard `NetworkManager` or not depends on the scope and features of your own project and is at your own discretion.
 
 ## Features
-*The term "NetworkScene" describes a Unity-Scene with a `NetworkManager` that is only handling the `NetworkBehaviors` in that Unity-Scene.
+_Info: the term "NetworkScene" describes a Unity-Scene with a `NetworkManager` that is only handling the `NetworkBehaviors` in that Unity-Scene._
 
 * A Scene-based `NetworkManager` for easy creation of `NetworkScenes*`
 * Multiple `NetworkScenes*` per Server-Instance
@@ -66,6 +66,7 @@ I recommend at least Unity 2018.3.6f1. If you have issues try upgrading to this 
 
 ## Overview
 Click on the images below to enlarge.
+
 ![Overview abstract](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Overview.jpeg "Overview abstract")
 
 ![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
