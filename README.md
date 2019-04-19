@@ -42,7 +42,7 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.4 NodeMaps](#nodemaps)
 
-[4. NetworkSceneManager](#networkscenemanager)
+[4. The NetworkSceneManager](#the-networkscenemanager)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4.1 What does the NetworkSceneManager do?](#what-does-the-networkscenemanager-do)
 
@@ -69,6 +69,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.3 Which is the correct IsServer I should use?](#which-is-the-correct-isserver-i-should-use)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7.3 My Scene is not being created or a wrong scene is created.](#my-scene-is-not-being-created-or-a-wrong-scene-is-created)
+
 
 # Introduction
 ## What is it?
