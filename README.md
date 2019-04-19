@@ -235,14 +235,22 @@ Please see the `NetworkSceneTeleporter`-Prefab and `NetworkSceneTeleporter`-Scri
 ## What does the NodeManager do?
 The `NodeManager` helps you with the following tasks:
 * Create and remove `NetworkScenes` without name-collision
-* Redirect instantiation of NetworkBehaviors to the correct `NetworkSceneManagers`
+* Redirect instantiation of `NetworkBehaviors` to the correct `NetworkSceneManagers`
 * Establish and maintain Server-To-Server communication
 
-The `NodeManager` is the central point for creating, removing and looking up `NetworkScenes`. It supports you with several helper-functions like `FindNetworkSceneItem` or `FindNetworkSceneTemplate` to make handling all your scenes easier. It exposes a variety of events for you within `NetworkScene`-creation and `NetworkBehavior`-instatiaton to always let you know what is going on.
+The `NodeManager` is the central point for creating, removing and looking up `NetworkScenes`. It supports you with several helper-functions like `FindNetworkSceneItem()` or `FindNetworkSceneTemplate()` to make handling all your scenes easier. It exposes a variety of events for you within `NetworkScene`-creation and `NetworkBehavior`-instatiaton to always let you know what is going on.
 
 Starting the `NodeManager` as a server or a client is also streamlined through its respective `StartAsServer()`- or `StartAsClient()`-functions.
 
 ## NodeManager-Parameters
+
+* _NetworkSceneManagerPrefab_: The `NetworkSceneManager` on this Prefab will be instantiated for all `NetworkScenes` to handle networking. Use this to provide a custom `NetworkSceneManager` if needed.
+* _AutoReconnectMasterManager_: When enabled the `NodeManager` will try to reconnect if it has lost its connection to the `MasterNode` in order to maintain Server-To-Server communication. If you only have one `Node` running as a server you should disable this.
+* _AutoReconnectMasterManagerInterval_: The interval in seconds to which the `NodeManager` should try to reconnect to the `MasterNode`.
+* _EnableRegisterDynamicScenes_: When enabled the `NodeManager` will register its dynamic scenes to the `MasterNode` so other `NodeManagers` can look up its `NetworkScenes`. If you only have one `Node` running as a server you should disable this.
+* _RegisterDynamicScenesRequireConfirmation_: When enabled a `NetworkScene` can only be fully initialized if its `NetworkScene` has been successfully registered on the `MasterNode` else it will be deleted. Registering `NetworkScenes`on the `MasterNode` is done to prevent scene-name-collision across servers. If you only have one `Node` running as a server you should disable this.
+* _EnableSceneLookUpCaching_: When enabled all lookups of `NetworkScenes` for connection-data from other servers through the `MasterNode` will be cached to prevent unnecessary querying of the `MasterNode`.
+
 ## Server-To-Server Communication
 ## NodeMaps
 
