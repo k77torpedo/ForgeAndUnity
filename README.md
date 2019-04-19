@@ -106,7 +106,7 @@ Click on the images below to enlarge.
 
 # Best Practices
 ## Best Practice #1: Change parts you don't like
-You can change and extend most of the code from the project without touching the core-files. Nearly everything in the `NodeManager` and `NetworkSceneManager` for example is marked as _virtual_ and you are encouraged to derive from these classes and _override_ them or extend parts and functions according to your project.
+You can change and extend most of the code from the project without touching the core-files. Nearly everything in the `NodeManager` and `NetworkSceneManager` for example is marked as _virtual_ and you are encouraged to derive from these classes and _override_ them or extend parts and functions according to your project. Even the Prefabs that come with the project like the `NetworkSceneTeleporter` have all their functions marked as _virtual_ so you can quickly extend them.
 
 Also note that the `NodeManager` has a public parameter for providing your own `NetworkSceneManager`-Prefab that it should instantiate for all `NetworkScenes` which makes it even more easy to provide your custom-logic. 
 
