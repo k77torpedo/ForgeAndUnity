@@ -102,7 +102,24 @@ Click on the images below to enlarge.
 ![Overview classes](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Classes.jpeg "Overview classes")
 
 
-# How to use
+# How to ...?
+## Create a NetworkScene
+## Create a NetworkScene on another Server
+## Create a NetworkBehavior on a specific NetworkScene
+## Create a NetworkBehavior on a specific NetworkScene on another Server
+## Transport the Player to another NetworkScene on any Server
+
+# The NodeManager
+## What does it do?
+## Parameters
+## Server-To-Server Communication
+## NodeMaps
+
+# The NetworkSceneManager
+## What does it do?
+## Parameters
+## NetworkBehaviorLists
+
 
 # Best Practices
 ## Best Practice #1: Change parts you don't like!
@@ -143,7 +160,7 @@ Be aware that when you create a dynamic scene like a new dungeon instance or a p
 ### Which is the correct IsServer I should use?
 To check if you are the server or the client you can either globally check for `NodeManager.IsServer` or locally check for `networkObject.IsServer` in your `NetworkBehaviors` from Forge Networking Remastered.
 
-Do not use `NodeManager.MasterNode.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or host within Server-To-Server communication.
+Do not use `NodeManager.MasterNode.IsServer` as this is an indication if a `Node` is connected to a `MasterNode` as a client or host within Server-To-Server communication. Also do not use `NetworkManager.IsServer` as that is the default `NetworkManager` of Forge Networking Remastered we are not using.
 
 ### My Scene is not being created or a wrong scene is created.
 Make sure that all Unity-Scenes you want to create as a `NetworkScene` are added in your Build-Settings. A Scene that is not added to your Build-Settings can't be created during runtime.
