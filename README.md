@@ -16,8 +16,8 @@
 [2. How to ...?](#how-to-)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.1 Create a NetworkScene](#create-a-networkscene)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.2 Create a NetworkScene on another Server](#create-a-networkscene-on-another-server)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.3 Create a NetworkBehavior in a specific NetworkScene](#create-a-networkbehavior-in-a-specific-networkscene)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.4 Create a NetworkBehavior in a specific NetworkScene on another Server](#create-a-networkbehavior-in-a-specific-networkscene-on-another-server)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.3 Create a NetworkBehavior in a NetworkScene](#create-a-networkbehavior-in-a-networkscene)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.4 Create a NetworkBehavior in a NetworkScene on another Server](#create-a-networkbehavior-in-a-networkscene-on-another-server)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2.5 Transport the Player to another NetworkScene on any Server](#transport-the-player-to-another-networkscene-on-any-server)<br/>
 
 [3. The NodeManager](#the-nodemanager)<br/>
@@ -184,7 +184,7 @@ if (callback.State == ServiceCallbackStateEnum.AWAITING_RESPONSE) {
 ```
 Altough it involves a bit more code we can still check for success!
 
-## Create a NetworkBehavior in a specific NetworkScene
+## Create a NetworkBehavior in a NetworkScene
 You can instantiate new `NetworkBehaviors` as shown below:
 ```
 // Instantiate a new NetworkBehavior in the current NetworkScene
@@ -200,7 +200,7 @@ NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneN
 ```
 You can setup the names for each `NetworkBehavior` in the `NetworkBehaviorList` of the `NodeManager`.
 
-## Create a NetworkBehavior in a specific NetworkScene on another Server
+## Create a NetworkBehavior in a NetworkScene on another Server
 Instantiating a new `NetworkBehavior` on another server is very similar to instantiating it locally as shown below:
 ```
 // Instantiate a new NetworkBehavior in a NetworkScene on another Node
@@ -264,7 +264,7 @@ Then a second - _the actual_ - scene will be created with the BuildIndex provide
 ## Best Practice #3: Change to a better Serializer!
 _Info: This is more reserved for the end of your project so don't overstress it._ 
 
-All internal serialization of data is currently done via C#s `BitFormatter` which is very flexible and undemanding in what it can serialize and deserialize but an atrocity in efficiency and performance. I just want to mention that you can switch to a different serializer at one point in time like _MsgPack_, _Ceras_ or _ZeroFormatter_. 
+All internal serialization of data is currently done via C#s `BitFormatter` which is very flexible and undemanding in what it can serialize and deserialize but an atrocity in efficiency and performance. I just want to mention that you might want to switch to a different serializer at some point in time like _MsgPack_, _Ceras_ or _ZeroFormatter_. 
 
 
 # Unity Limitations
