@@ -103,12 +103,12 @@ Click on the images below to enlarge.
 # Best Practices
 
 # Unity Limitations
-## NavMeshes and `NetworkSceneTemplate.SceneOffset`
+## NavMeshes and SceneOffset
 _Info: The `NetworkSceneTemplate.SceneOffset` allows a scene to be created with an offset so that it does not physically overlap with existing scenes._
 
 Be aware that when you create a dynamic scene like a new dungeon instance or a player housing instance that the `NetworkSceneTemplate.SceneOffset` will not move the NavMesh associated with the scene. I recommend using the NavMeshTools from Unity to be able to create NavMeshes during runtime solve this problem.
 
-## Dynamic Scenes and `NetworkSceneTemplate.SceneOffset`
+## Dynamic Scenes and SceneOffset
 _Info: The `NetworkSceneTemplate.SceneOffset` allows a scene to be created with an offset so that it does not physically overlap with existing scenes._
 
 Be aware that when you create a dynamic scene like a new dungeon instance or a player housing instance that the `NetworkSceneTemplate.SceneOffset` can't be properly applied to the Unity-Scene when the `GameObjects` of the Unity-Scene are marked as `static`.
