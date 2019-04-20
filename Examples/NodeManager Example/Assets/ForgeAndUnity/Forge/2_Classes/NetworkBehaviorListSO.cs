@@ -6,7 +6,7 @@ namespace ForgeAndUnity.Forge {
     /// Describes static <see cref="NetworkBehaviorListItem"/>-related data that does not change during runtime like id, name or description. 
     /// Used by a <see cref="NetworkSceneManager"/>.
     /// </summary>
-    [CreateAssetMenu(menuName = "ForgeAndHelpers/NetworkBehaviorListSO")]
+    [CreateAssetMenu(menuName = "ForgeAndUnity/NetworkBehaviorListSO")]
     public class NetworkBehaviorListSO : ScriptableObject {
         //Fields
         public int id;
