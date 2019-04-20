@@ -80,7 +80,7 @@ _Info: the term "NetworkScene" describes a Unity-Scene with a `NetworkManager` t
 * Concept of "Static-Scenes": `NetworkScenes` that are and should always be reachable under a certain IP and Port, basically the "static  world"/"overworld"
 * Concept of "Dynamic-Scenes": `NetworkScenes` that are created on demand for things like Dungeon Instances or Player Housing Instances etc. and that will be destroyed again at some point
 * Port-recycling for "Dynamic Scenes": If a "Dynamic Scene" is destroyed the port can be reused at a later time from a range of allowed Ports
-* A global registration system for "Dynamic Scenes" that all servers can lookup connection information in and for preventing name-collusion of `NetworkScenes` across Server-Instances
+* A global registration system for "Dynamic Scenes" that all servers can lookup connection information in and for preventing name-collision of `NetworkScenes` across Server-Instances
 * Creating `NetworkScenes` with a position-offset to prevent them physically overlapping each other
 * `NetworkScenes` can try to reconnect/rebind after a set delay when disconnected
 
