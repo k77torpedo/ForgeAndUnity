@@ -273,7 +273,16 @@ This will create a Scriptable-Object holding your `NodeMap` that you can edit an
 
 # The NetworkSceneManager
 ## What does the NetworkSceneManager do?
+A `NetworkSceneManager`is always responsible for exactly one Unity-Scene. The `NetworkSceneManager` instantiates `NetworkBehaviors` and makes sure they are moved to its Unity-Scene. This way the world can be easily split up into many parts which each part being a Unity-Scene handled by a `NetworkSceneManager`. A Unity-Scene and a `NetworkSceneManager` together are refered to as a `NetworkScene`. 
+
+The client will only ever be connected to one `NetworkSceneManager` and only see the part of the world the `NetworkSceneManager` is handling.
+
 ## NetworkSceneManager-Parameters
+![NetworkSceneManager](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/NetworkSceneManager.JPG "NetworkSceneManager")
+* **NetworkBehaviorListSO**: A list of all `NetworkBehaviors` the `NetworkSceneManager` can instantiate. If the `NetworkSceneManager` has been created by a `NodeManager` it will use the `NetworkBehaviorListSO` of the `NodeManager`.
+* **AutoReconnect**: When enabled the `NetworkSceneManager` will try to reconnect if connection has been lost.
+* **AutoReconnectInterval**: The interval in seconds the `NetworkSceneManager` should try to reconnect.
+
 ## NetworkBehaviorLists
 
 
