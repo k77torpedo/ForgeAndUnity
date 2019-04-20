@@ -244,7 +244,7 @@ The `NodeManager` helps you with the following tasks:
 * Redirect instantiation of `NetworkBehaviors` to the correct `NetworkSceneManagers`
 * Establish and maintain Server-To-Server communication
 
-The `NodeManager` is the central point for creating, removing and looking up `NetworkScenes`. It supports you with several helper-functions like `FindNetworkSceneItem()` or `FindNetworkSceneTemplate()` to make handling all your scenes easier. It exposes a variety of events for you within `NetworkScene`-creation and `NetworkBehavior`-instatiaton.
+The `NodeManager` is the central point for creating, removing and looking up `NetworkScenes`. It supports you with several helper-functions like `FindNetworkSceneItem()` or `FindNetworkSceneTemplate()` to make handling all your scenes easier. It exposes a variety of events for you within `NetworkScene`-creation and `NetworkBehavior`-instantiaton.
 
 You can start the `NodeManager` as a server or a client through its respective `StartAsServer()`- or `StartAsClient()`-functions.
 
@@ -264,7 +264,9 @@ You can start the `NodeManager` as a server or a client through its respective `
 ![Server-To-Server](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Server2Server.jpeg "Server-To-Server")
 In order for `NetworkBehaviors` and especially Players to move across server-instances we need Server-To-Server communication so that if a Player in 'Server A' moves to 'Server B' the data of the Player can be properly transmitted.
 
-How do servers communicate with each other you might ask? The answer to that would be very simple: all server play their own little Forge-Game to transmit information with each other where one server is the host (the `MasterNode`) and the other servers are the clients (all other `Nodes`). The `NetWorker` for this is located on `NodeManager.MasterManager`. Additionally, if you look at the `NodeService`-Script that is currently used for Server-To-Server communication you will find that it is just a simple `NetworkBehavior` instantiated like any other on the game that the servers are playing with each other.
+How do servers communicate with each other you might ask? The answer to that would be very simple: all servers play their own little Forge-Game to transmit information with each other where one server is the host (the `MasterNode`) and the other servers are the clients. The `NetworkSceneManager` for this is located on `NodeManager.MasterManager`. 
+
+Additionally, if you look at the `NodeService`-Script that is currently used for Server-To-Server communication you will find that it is just a simple `NetworkBehavior` instantiated like any other on the game that the servers are playing with each other.
 
 This gives you all the flexibility of Forge Networking Remastered to extend Server-To-Server communication without introducing extra logic or restrictions. If you want the servers to communicate more information or add stuff like database-functionality across servers you can just make a `NetworkBehavior` and instantiate it on the game the servers are playing with each other - easy as that!
 
