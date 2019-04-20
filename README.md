@@ -264,7 +264,7 @@ You can start the `NodeManager` as a server or a client through its respective `
 ![Server-To-Server](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Server2Server.jpeg "Server-To-Server")
 In order for `NetworkBehaviors` and especially Players to move across server-instances we need Server-To-Server communication so that if a Player in 'Server A' moves to 'Server B' the data of the Player can be properly transmitted.
 
-How do servers communicate with each other you might ask? The answer to that would be very simple: all servers play their own little Forge-Game to transmit information with each other where one server is the host (the `MasterNode`) and the other servers are the clients. The `NetworkSceneManager` for this is located on `NodeManager.MasterManager`. 
+How do servers communicate with each other you might ask? The answer to that would be very simple: all servers play their own little Forge-Game to transmit information with each other where one server is the host (the `MasterNode`) and the other servers are the clients. The `NetworkSceneManager` for this game is located on `NodeManager.MasterManager`. 
 
 Additionally, if you look at the `NodeService`-Script that is currently used for Server-To-Server communication you will find that it is just a simple `NetworkBehavior` instantiated like any other on the game that the servers are playing with each other.
 
