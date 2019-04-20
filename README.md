@@ -80,7 +80,7 @@ _Info: the term "NetworkScene" describes a Unity-Scene with a `NetworkManager` t
 * Concept of "Static-Scenes": `NetworkScenes` that are and should always be reachable under a certain IP and Port, basically the "static  world"/"overworld"
 * Concept of "Dynamic-Scenes": `NetworkScenes` that are created on demand for things like Dungeon Instances or Player Housing Instances etc. and that will be destroyed again at some point
 * Port-recycling for "Dynamic Scenes": If a "Dynamic Scene" is destroyed the port can be reused at a later time from a range of allowed Ports
-* A global registration system for "Dynamic Scenes" that all servers can lookup connection information in and for preventing name-collusion of `NetworkScenes` across Server-Instances
+* A global registration system for "Dynamic Scenes" that all servers can lookup connection information in and for preventing name-collision of `NetworkScenes` across Server-Instances
 * Creating `NetworkScenes` with a position-offset to prevent them physically overlapping each other
 * `NetworkScenes` can try to reconnect/rebind after a set delay when disconnected
 
@@ -120,7 +120,7 @@ Click on the images below to enlarge.
 ## Create a NetworkScene
 Every `NetworkScene` is created from a `NetworkSceneTemplate`. Creating a `NetworkSceneTemplate` during runtime is very easy and straight-forward as shown below:
 ```
-// Create the connection-information for the NetworkScene
+// Create the connection-information for the NetworkSceneTemplate
 NetworkSceneManagerSetting setting = new NetworkSceneManagerSetting();
 setting.MaxConnections = 64;
 setting.UseTCP = false;
@@ -137,7 +137,9 @@ template.Settings = setting;
 //Create the NetworkScene
 NodeManager.Instance.CreateNetworkScene(template);
 ```
-You set up the connection-information, tell the template what BuildIndex you want to load and under what scene-name and the `NodeManager` will do the rest for you! To take it even one step further you can hook up to events that will be emitted during scene-creation. This lets you know when exactly your scene is ready to instantiate your `NetworkBehaviors`:
+First you set up the connection-information. Then you set the BuildIndex of the scene you want to create as a `NetworkScene`. Finally, you choose a custom-name for your `NetworkScene`. The `NodeManager` will do the rest for you. 
+
+You can have 500 `NetworkScenes` of the same BuildIndex as long as they all have unique custom-names - this is especially important when creating dungeon-instances where you want to create the same dungeon over and over for different players. To take it even one step further you can hook up to events that will be emitted during scene-creation. This lets you know when exactly your scene is ready to instantiate your `NetworkBehaviors`:
 
 ```
 //Create the NetworkScene
@@ -152,7 +154,7 @@ if (!scene.IsReady) {
 ## Create a NetworkScene on another Server
 Creating a `NetworkScene` on another server is pretty easy and very similar to creating it locally as shown below:
 ```
-// Create the connection-information for the NetworkScene
+// Create the connection-information for the NetworkSceneTemplate
 NetworkSceneManagerSetting setting = new NetworkSceneManagerSetting();
 setting.MaxConnections = 64;
 setting.UseTCP = false;
@@ -170,7 +172,9 @@ template.Settings = setting;
 uint targetNodeId = 2;
 NodeManager.Instance.CreateNetworkSceneInNode(targetNodeId, template);
 ```
-You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. Also be aware that you need to have at least one `Node` set as `IsMasterNode` as otherwise no Server-To-Server communication can happen. You can set a `Node` as `IsMasterNode` in the `NodeMap` of the `NodeManager`. As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
+You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. You can set each `NodeId` on the `NodeMap` (see [3.4 NodeMaps](#nodemaps) for more information). Also be aware that you need to have at least one `NodeManager` running as a `MasterNode` as otherwise no Server-To-Server communication can happen. You can set a `Node` as `IsMasterNode` in the `NodeMap` of the `NodeManager`. 
+
+As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
 
 ```
 //Create the NetworkScene on another Node
@@ -200,7 +204,7 @@ If you prefer readability you can also instantiate via name:
 string currentSceneName = gameObject.scene.name;
 NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, "Player");
 ```
-You can setup the names for each `NetworkBehavior` in the `NetworkBehaviorList` of the `NodeManager`.
+You can setup the names for each `NetworkBehavior` in the `NetworkBehaviorList` of the `NodeManager` (see [4.3 NetworkBehaviorLists](#networkbehaviorlists) for more information).
 
 ## Create a NetworkBehavior in a NetworkScene on another Server
 Instantiating a new `NetworkBehavior` on another server is very similar to instantiating it locally as shown below:
@@ -240,7 +244,7 @@ The `NodeManager` helps you with the following tasks:
 * Redirect instantiation of `NetworkBehaviors` to the correct `NetworkSceneManagers`
 * Establish and maintain Server-To-Server communication
 
-The `NodeManager` is the central point for creating, removing and looking up `NetworkScenes`. It supports you with several helper-functions like `FindNetworkSceneItem()` or `FindNetworkSceneTemplate()` to make handling all your scenes easier. It exposes a variety of events for you within `NetworkScene`-creation and `NetworkBehavior`-instatiaton.
+The `NodeManager` is the central point for creating, removing and looking up `NetworkScenes`. It supports you with several helper-functions like `FindNetworkSceneItem()` or `FindNetworkSceneTemplate()` to make handling all your scenes easier. It exposes a variety of events for you within `NetworkScene`-creation and `NetworkBehavior`-instantiaton.
 
 You can start the `NodeManager` as a server or a client through its respective `StartAsServer()`- or `StartAsClient()`-functions.
 
@@ -260,7 +264,9 @@ You can start the `NodeManager` as a server or a client through its respective `
 ![Server-To-Server](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/ForgeAndUnity%20Server2Server.jpeg "Server-To-Server")
 In order for `NetworkBehaviors` and especially Players to move across server-instances we need Server-To-Server communication so that if a Player in 'Server A' moves to 'Server B' the data of the Player can be properly transmitted.
 
-How do servers communicate with each other you might ask? The answer to that would be very simple: all server play their own little Forge-Game to transmit information with each other where one server is the host (the `MasterNode`) and the other servers are the clients (all other `Nodes`). The `NetWorker` for this is located on `NodeManager.MasterManager`. Additionally, if you look at the `NodeService`-Script that is currently used for Server-To-Server communication you will find that it is just a simple `NetworkBehavior` instantiated like any other on the game that the servers are playing with each other.
+How do servers communicate with each other you might ask? The answer to that would be very simple: all servers play their own little Forge-Game to transmit information with each other where one server is the host (the `MasterNode`) and the other servers are the clients. The `NetworkSceneManager` for this game is located on `NodeManager.MasterManager`. 
+
+Additionally, if you look at the `NodeService`-Script that is currently used for Server-To-Server communication you will find that it is just a simple `NetworkBehavior` instantiated like any other on the game that the servers are playing with each other.
 
 This gives you all the flexibility of Forge Networking Remastered to extend Server-To-Server communication without introducing extra logic or restrictions. If you want the servers to communicate more information or add stuff like database-functionality across servers you can just make a `NetworkBehavior` and instantiate it on the game the servers are playing with each other - easy as that!
 
@@ -273,9 +279,22 @@ This will create a Scriptable-Object holding your `NodeMap` that you can edit an
 
 # The NetworkSceneManager
 ## What does the NetworkSceneManager do?
-## NetworkSceneManager-Parameters
-## NetworkBehaviorLists
+A `NetworkSceneManager`is always responsible for exactly one Unity-Scene. The `NetworkSceneManager` instantiates `NetworkBehaviors` and makes sure they are moved to its Unity-Scene. This way the world can be easily split up into many parts which each part being a Unity-Scene handled by a `NetworkSceneManager`. A Unity-Scene and a `NetworkSceneManager` together are refered to as a `NetworkScene`. 
 
+The client will only ever be connected to one `NetworkSceneManager` and only see the part of the world the `NetworkSceneManager` is handling.
+
+## NetworkSceneManager-Parameters
+![NetworkSceneManager](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/NetworkSceneManager.JPG "NetworkSceneManager")
+* **NetworkBehaviorListSO**: A list of all `NetworkBehaviors` the `NetworkSceneManager` can instantiate. If the `NetworkSceneManager` has been created by a `NodeManager` it will use the `NetworkBehaviorListSO` of the `NodeManager`.
+* **AutoReconnect**: When enabled the `NetworkSceneManager` will try to reconnect if connection has been lost.
+* **AutoReconnectInterval**: The interval in seconds the `NetworkSceneManager` should try to reconnect.
+
+## NetworkBehaviorLists
+`NetworkBehaviorLists` are lists of `NetworkBehaviors` that a `NetworkSceneManager` can instantiate over the network. You can create a `NetworkBehaviorList` by right-clicking in your project-window and choosing 'Create > ForgeAndUnity > NetworkBehaviorListSO' as shown below:
+
+![NetworkBehaviorList](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/NetworkBehaviorLists.png "NetworkBehaviorList")
+
+This will create a Scriptable-Object holding your `NetworkBehaviorList` that you can edit and assign to your `NetworkSceneManager` and `NodeManager`.
 
 # Best Practices
 ## Best Practice #1: Change parts you don't like!
