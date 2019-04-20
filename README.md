@@ -120,7 +120,7 @@ Click on the images below to enlarge.
 ## Create a NetworkScene
 Every `NetworkScene` is created from a `NetworkSceneTemplate`. Creating a `NetworkSceneTemplate` during runtime is very easy and straight-forward as shown below:
 ```
-// Create the connection-information for the NetworkScene
+// Create the connection-information for the NetworkSceneTemplate
 NetworkSceneManagerSetting setting = new NetworkSceneManagerSetting();
 setting.MaxConnections = 64;
 setting.UseTCP = false;
@@ -137,7 +137,9 @@ template.Settings = setting;
 //Create the NetworkScene
 NodeManager.Instance.CreateNetworkScene(template);
 ```
-You set up the connection-information, tell the template what BuildIndex you want to load and under what scene-name and the `NodeManager` will do the rest for you! To take it even one step further you can hook up to events that will be emitted during scene-creation. This lets you know when exactly your scene is ready to instantiate your `NetworkBehaviors`:
+First you set up the connection-information. Then you set the BuildIndex of the scene you want to create as a `NetworkScene`. Lastly you choose a custom-name for your `NetworkScene`. The `NodeManager` will do the rest for you. 
+
+You can have 500 `NetworkScenes` of the same BuildIndex as long as they all have unique custom-names - this is especially important when creating dungeon-instances where you want to have the same dungeon for different players. To take it even one step further you can hook up to events that will be emitted during scene-creation. This lets you know when exactly your scene is ready to instantiate your `NetworkBehaviors`:
 
 ```
 //Create the NetworkScene
