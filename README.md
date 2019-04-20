@@ -137,9 +137,9 @@ template.Settings = setting;
 //Create the NetworkScene
 NodeManager.Instance.CreateNetworkScene(template);
 ```
-First you set up the connection-information. Then you set the BuildIndex of the scene you want to create as a `NetworkScene`. Lastly you choose a custom-name for your `NetworkScene`. The `NodeManager` will do the rest for you. 
+First you set up the connection-information. Then you set the BuildIndex of the scene you want to create as a `NetworkScene`. Finally, you choose a custom-name for your `NetworkScene`. The `NodeManager` will do the rest for you. 
 
-You can have 500 `NetworkScenes` of the same BuildIndex as long as they all have unique custom-names - this is especially important when creating dungeon-instances where you want to have the same dungeon for different players. To take it even one step further you can hook up to events that will be emitted during scene-creation. This lets you know when exactly your scene is ready to instantiate your `NetworkBehaviors`:
+You can have 500 `NetworkScenes` of the same BuildIndex as long as they all have unique custom-names - this is especially important when creating dungeon-instances where you want to create the same dungeon over and over for different players. To take it even one step further you can hook up to events that will be emitted during scene-creation. This lets you know when exactly your scene is ready to instantiate your `NetworkBehaviors`:
 
 ```
 //Create the NetworkScene
@@ -154,7 +154,7 @@ if (!scene.IsReady) {
 ## Create a NetworkScene on another Server
 Creating a `NetworkScene` on another server is pretty easy and very similar to creating it locally as shown below:
 ```
-// Create the connection-information for the NetworkScene
+// Create the connection-information for the NetworkSceneTemplate
 NetworkSceneManagerSetting setting = new NetworkSceneManagerSetting();
 setting.MaxConnections = 64;
 setting.UseTCP = false;
@@ -172,7 +172,7 @@ template.Settings = setting;
 uint targetNodeId = 2;
 NodeManager.Instance.CreateNetworkSceneInNode(targetNodeId, template);
 ```
-You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. Also be aware that you need to have at least one `Node` set as `IsMasterNode` as otherwise no Server-To-Server communication can happen. You can set a `Node` as `IsMasterNode` in the `NodeMap` of the `NodeManager`. As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
+You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. You can set each `NodeId` on the `NodeMap` (see [3.4 NodeMaps](#nodemaps) for more information). Also be aware that you need to have at least one `NodeManager` running as a `MasterNode` as otherwise no Server-To-Server communication can happen. You can set a `Node` as `IsMasterNode` in the `NodeMap` of the `NodeManager`. As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
 
 ```
 //Create the NetworkScene on another Node
