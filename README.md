@@ -284,7 +284,11 @@ The client will only ever be connected to one `NetworkSceneManager` and only see
 * **AutoReconnectInterval**: The interval in seconds the `NetworkSceneManager` should try to reconnect.
 
 ## NetworkBehaviorLists
+`NetworkBehaviorLists` are lists of `NetworkBehaviors` that a `NetworkSceneManager` can instantiate over the network. You can create a `NetworkBehaviorList` by right-clicking in your project-window and choosing 'Create > ForgeAndUnity > NetworkBehaviorListSO' as shown below:
 
+![NetworkBehaviorList](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/NetworkBehaviorLists.png "NetworkBehaviorList")
+
+This will create a Scriptable-Object holding your `NetworkBehaviorList` that you can edit and assign to your `NetworkSceneManager` and `NodeManager`.
 
 # Best Practices
 ## Best Practice #1: Change parts you don't like!
