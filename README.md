@@ -172,7 +172,9 @@ template.Settings = setting;
 uint targetNodeId = 2;
 NodeManager.Instance.CreateNetworkSceneInNode(targetNodeId, template);
 ```
-You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. You can set each `NodeId` on the `NodeMap` (see [3.4 NodeMaps](#nodemaps) for more information). Also be aware that you need to have at least one `NodeManager` running as a `MasterNode` as otherwise no Server-To-Server communication can happen. You can set a `Node` as `IsMasterNode` in the `NodeMap` of the `NodeManager`. As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
+You will need to know the `NodeId` of the server you want to create the `NetworkScene` in. You can set each `NodeId` on the `NodeMap` (see [3.4 NodeMaps](#nodemaps) for more information). Also be aware that you need to have at least one `NodeManager` running as a `MasterNode` as otherwise no Server-To-Server communication can happen. You can set a `Node` as `IsMasterNode` in the `NodeMap` of the `NodeManager`. 
+
+As with locally creating a `NetworkScene` we also have the option to hook up on events to know if anything went wrong or the scene has been created successfully:
 
 ```
 //Create the NetworkScene on another Node
@@ -202,7 +204,7 @@ If you prefer readability you can also instantiate via name:
 string currentSceneName = gameObject.scene.name;
 NetworkBehavior behavior = NodeManager.Instance.InstantiateInScene(currentSceneName, "Player");
 ```
-You can setup the names for each `NetworkBehavior` in the `NetworkBehaviorList` of the `NodeManager`.
+You can setup the names for each `NetworkBehavior` in the `NetworkBehaviorList` of the `NodeManager` (see [4.3 NetworkBehaviorLists](#networkbehaviorlists) for more information).
 
 ## Create a NetworkBehavior in a NetworkScene on another Server
 Instantiating a new `NetworkBehavior` on another server is very similar to instantiating it locally as shown below:
