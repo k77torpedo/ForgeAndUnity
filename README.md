@@ -265,6 +265,11 @@ How do servers communicate with each other you might ask? The answer to that wou
 This gives you all the flexibility of Forge Networking Remastered to extend Server-To-Server communication without introducing extra logic or restrictions. If you want the servers to communicate more information or add stuff like database-functionality across servers just make a `NetworkBehavior` and instantiate it on the game the servers are playing with each other - easy as that!
 
 ## NodeMaps
+`NodeMaps` describe all `Nodes` with their respective `NetworkScenes` that a `NodeManager` should instantiate. Theese `NetworkScenes` are guaranteed to always be reachable under a certain Ip or Port and thus for your 'persistent world' or 'overworld' - they are refered to as _static_ `NetworkScenes`. Every `NodeManager` needs a `NodeMap` to start. You can create a `NodeMap` by right-clicking in your project-window and choosing 'Create > ForgeAndUnity > NodeMapSO' as shown below:
+
+![NodeMaps](https://raw.githubusercontent.com/k77torpedo/ForgeAndUnity/master/Documentation/NodeMaps.png "NodeMaps")
+
+This will create a Scriptable-Object holding your `NodeMap` that you can edit and assign to the `NodeManager`.
 
 # The NetworkSceneManager
 ## What does the NetworkSceneManager do?
