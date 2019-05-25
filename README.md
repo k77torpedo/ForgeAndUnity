@@ -55,8 +55,9 @@ This project is an alternative implementation of the standard `NetworkManager` t
 
 ## When to use it?
 * You need your game to be split up into smaller parts and/or want to be able to run one game on multiple servers. 
+* You need "Room"-functionality.
 * You want your clients to only connect to and see one part of the world instead of everything. 
-* You want functionality like a persistent world or dungeon instances
+* You want functionality like a persistent world or dungeon instances.
 
 ## When not to use it?
 * If you have no prior experience with Networking or Forge Networking Remastered. Gain experience with the framework first.
