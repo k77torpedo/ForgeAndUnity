@@ -61,7 +61,6 @@ This project is an alternative implementation of the standard `NetworkManager` t
 ## When not to use it?
 * If you have no prior experience with Networking or Forge Networking Remastered. Gain experience with the framework first.
 * If your project is an arena- or lobby-style game stick with the default `NetworkManager`. 
-* If your project wants to have the host also be a player of the game. This solution is made for a "server" that clients connect to. 
 
 Additionally, at the time of writing the native Steam-Integration of the standard `NetworkManager`, the standard implementation of a `MasterServer`, compatability with the `Webserver` or `Matchmaking` in Forge Networking Remastered are not integrated. While these features might be implemented at a later time please know that you will need to provide them yourself currently.
 
